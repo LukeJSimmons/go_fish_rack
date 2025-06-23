@@ -32,8 +32,14 @@ class Server < Sinatra::Base
 
     respond_to do |format|
       format.json { json api_key: new_api_key }
-      format.html { redirect '/game' }
+      format.html { redirect '/lobby' }
     end
+  end
+
+  get '/lobby' do
+    redirect '/game' if self.class.game.players.count >= 2
+
+    slim :lobby, locals: { game: self.class.game }
   end
 
   get '/game' do
