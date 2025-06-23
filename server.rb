@@ -14,6 +14,10 @@ class Server < Sinatra::Base
     @@game ||= Game.new
   end
 
+  def self.api_keys
+    @@api_keys ||= {}
+  end
+
   get '/' do
     slim :index
   end
@@ -22,11 +26,28 @@ class Server < Sinatra::Base
     player = Player.new(params['name'])
     session[:current_player] = player
     self.class.game.add_player(player)
-    redirect '/game'
+
+    new_api_key = api_key(player)
+    self.class.api_keys[new_api_key] = player
+
+    respond_to do |format|
+      format.json { json api_key: new_api_key }
+      format.html { redirect '/game' }
+    end
   end
 
   get '/game' do
     redirect '/' if self.class.game.empty?
-    slim :game, locals: { game: self.class.game, current_player: session[:current_player] }
+
+    respond_to do |format|
+      format.json { json players: self.class.game.players }
+      format.html { slim :game, locals: { game: self.class.game, current_player: session[:current_player] } }
+    end
+  end
+
+  private
+
+  def api_key(player)
+    Base64.urlsafe_encode64(player.name)
   end
 end
