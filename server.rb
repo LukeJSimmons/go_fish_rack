@@ -39,7 +39,9 @@ class Server < Sinatra::Base
   get '/lobby' do
     redirect '/game' if self.class.game.players.count >= 2
 
-    slim :lobby, locals: { game: self.class.game }
+    respond_to do |format|
+      format.html { slim :lobby, locals: { game: self.class.game, current_player: session[:current_player] } }
+    end
   end
 
   get '/game' do
