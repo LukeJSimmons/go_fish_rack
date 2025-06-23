@@ -1,2 +1,4 @@
 p Players
-= locals[:current_player].name
+ul
+  - game.players.each do |player|
+    li.players__player = player.name
