@@ -7,6 +7,6 @@ class Player
   end
 
   def add_card_to_hand(card)
-    hand.unshift(card)
+    hand.push(card)
   end
 end

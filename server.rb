@@ -52,7 +52,7 @@ class Server < Sinatra::Base
 
     respond_to do |format|
       format.json { json players: self.class.game.players }
-      format.html { slim :game, locals: { game: self.class.game, current_player: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
+      format.html { slim :game, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
     end
   end
 

@@ -19,6 +19,8 @@ RSpec.describe Server do
   end
 
   after do
+    Server.game.players.clear
+    Server.game.deck.reset
     Capybara.reset_sessions!
   end
 
@@ -62,13 +64,13 @@ RSpec.describe Server do
         session.click_on 'Join'
         expect(session).to have_css('.players__player', text: player_name)
       end
+      session1.driver.refresh
       expect(session1).to have_content('Players')
       expect(session2).to have_content('Player 1')
-      session1.driver.refresh
       expect(session1).to have_content('Player 2')
     end
 
-    fit 'displays hand' do
+    it 'displays hand' do
       session1 = Capybara::Session.new(:selenium_chrome_headless, Server.new)
       session2 = Capybara::Session.new(:selenium_chrome_headless, Server.new)
       [ session1, session2 ].each_with_index do |session, index|
@@ -77,11 +79,11 @@ RSpec.describe Server do
         session.fill_in :name, with: player_name
         session.click_on 'Join'
       end
-      expect(session2).to have_content('is, A')
+      expect(session2).to have_content('is, K')
       session1.driver.refresh
-      expect(session1).to have_content('is, K')
+      expect(session1).to have_content('is, A')
       session2.driver.refresh
-      expect(session2).to_not have_content('is, K')
+      expect(session2).to_not have_content('is, A')
     end
   end
 

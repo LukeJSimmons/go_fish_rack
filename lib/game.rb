@@ -1,8 +1,11 @@
+require_relative 'deck'
+
 class Game
-  attr_accessor :players
+  attr_accessor :players, :deck
 
   def initialize
     @players = []
+    @deck = Deck.new
   end
 
   def add_player(player)
@@ -16,8 +19,14 @@ class Game
   def start
     return if players.any? { |player| player.hand.count > 0 }
 
-    deck = ['A','K']
+    deal_cards
+  end
 
-    players.each { |player| player.add_card_to_hand(deck.pop) }
+  private
+
+  def deal_cards
+    players.each do |player|
+      7.times { player.add_card_to_hand(deck.draw_card) }
+    end
   end
 end
