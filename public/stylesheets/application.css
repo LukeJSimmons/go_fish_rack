@@ -4,3 +4,6 @@
 /* Component Styles */
 @import './join-form.css';
 @import './lobby.css';
+@import './panel.css';
+@import './game-layout.css';
+@import './player-decks.css';

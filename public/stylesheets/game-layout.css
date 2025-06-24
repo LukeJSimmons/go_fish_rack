@@ -1,0 +1,11 @@
+.game-layout {
+  /* 360px */
+  --gf-sidebar-width: calc(var(--op-size-unit) * 90);
+  /* 280px */
+  --gf-footer-height: calc(var(--op-size-unit) * 70);
+
+  display: grid;
+  grid-template-columns: 1fr var(--gf-sidebar-width);
+  grid-template-rows: 1fr var(--gf-footer-height);
+  height: 100%;
+}

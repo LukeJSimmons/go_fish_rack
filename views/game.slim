@@ -1,7 +1,26 @@
-p Game
-p Players
-ul
-  - game.players.each do |player|
-    li.players__player = player.name
-p = "You are #{current_player.name}"
-p = "You're hand is, #{current_player.hand.map(&:rank).join(' ')}"
+.game-layout
+  .panel
+    .panel__header
+      span Game
+    .panel__content
+      .player-decks
+        span Players
+        ul
+          - game.players.each do |player|
+            li.players__player = player.name
+        span = "You are #{current_player.name}"
+  .panel
+    .panel__header
+      span Game Feed
+    .panel__content
+      span Player 1 asked for 8s from Player 2
+  .panel
+    .panel__header
+      span Your Hand
+    .panel__content
+      span = "You're hand is, #{current_player.hand.map(&:rank).join(' ')}"
+  .panel
+    .panel__header
+      span Your Books
+    .panel__content
+      span Books

@@ -64,6 +64,8 @@ RSpec.describe Server do
         session.click_on 'Join'
       end
       session1.driver.refresh
+      session1.driver.refresh
+      session1.click_on 'Start Game'
       expect(session1).to have_content('Game')
       expect(session2).to have_content('Player 1')
       expect(session1).to have_content('Player 2')
@@ -78,8 +80,10 @@ RSpec.describe Server do
         session.fill_in :name, with: player_name
         session.click_on 'Join'
       end
+      session2.click_on 'Start Game'
       expect(session2).to have_content('is, K')
       session1.driver.refresh
+      session1.click_on 'Start Game'
       expect(session1).to have_content('is, A')
       session2.driver.refresh
       expect(session2).to_not have_content('is, A')
