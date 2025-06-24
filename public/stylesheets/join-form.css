@@ -1,4 +1,5 @@
 .join-form {
   display: flex;
   justify-content: center;
+  padding-top: var(--op-space-3x-large);
 }

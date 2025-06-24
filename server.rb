@@ -38,7 +38,7 @@ class Server < Sinatra::Base
 
   get '/lobby' do
     redirect '/' if self.class.game.empty?
-    redirect '/game' if self.class.game.players.count >= 2
+    # redirect '/game' if self.class.game.players.count == self.class.game.players_needed_to_start
 
     respond_to do |format|
       format.html { slim :lobby, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
@@ -47,6 +47,7 @@ class Server < Sinatra::Base
 
   get '/game' do
     redirect '/' if self.class.game.empty?
+    redirect '/lobby' unless self.class.game.players.count == self.class.game.players_needed_to_start
 
     self.class.game.start
 

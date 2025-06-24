@@ -4,7 +4,3 @@
 /* Component Styles */
 @import './join-form.css';
 @import './lobby.css';
-
-.app-body {
-  padding-top: var(--op-space-3x-large);
-}

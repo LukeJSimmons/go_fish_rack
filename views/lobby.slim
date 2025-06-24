@@ -15,3 +15,5 @@
             tr
               td Waiting for players...
       p = "You are " + current_player.name
+      - if game.players_needed == 0
+        a.btn href="/game" Start Game
