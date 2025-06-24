@@ -66,7 +66,7 @@ RSpec.describe Server do
       expect(session2).to have_content('Game')
     end
 
-    fit 'displays hand' do
+    it 'displays hand' do
       session2.click_on 'Start Game'
       session1.driver.refresh
       session1.click_on 'Start Game'
@@ -84,17 +84,60 @@ RSpec.describe Server do
     end
   end
 
-  it 'returns game status via API' do
-    post '/join', { 'name' => 'Caleb' }.to_json, {
-      'Accept' => 'application/json',
-      'CONTENT_TYPE' => 'application/json'
-    }
-    api_key = JSON.parse(last_response.body)['api_key']
-    expect(api_key).not_to be_nil
-    get '/game', nil, {
-      'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
-      'Accept' => 'application/json'
-    }
-    expect(JSON.parse(last_response.body).keys).to include 'players'
+  describe 'API key authorization' do
+    before do
+      post '/join', { 'name' => 'Caleb' }.to_json, {
+        'Accept' => 'application/json',
+        'CONTENT_TYPE' => 'application/json'
+      }
+    end
+
+    it 'returns game status via API' do
+      api_key = JSON.parse(last_response.body)['api_key']
+      expect(api_key).not_to be_nil
+      get '/game', nil, {
+        'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+        'Accept' => 'application/json',
+        'CONTENT_TYPE' => 'application/json'
+      }
+      expect(JSON.parse(last_response.body).keys).to include 'players'
+    end
+
+    context 'when client does not have API key' do
+      context 'GET /game' do
+        it 'returns 401 error' do
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "invalid",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+
+      context 'GET /lobby' do
+        it 'returns 401 error' do
+          get '/lobby', nil, {
+            'HTTP_AUTHORIZATION' => "invalid",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+
+      context 'POST /game' do
+        it 'returns 401 error' do
+          post '/game', nil, {
+            'HTTP_AUTHORIZATION' => "invalid",
+            'Accept' => 'application/json',
+            'target' => 'Player 2',
+            'request' => 'A',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+    end
   end
 end
