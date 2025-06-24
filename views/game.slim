@@ -36,7 +36,9 @@
       span Your Hand
     .panel__content
       .hand
-        span = "You're hand is, #{current_player.hand.map(&:rank).join(' ')}"
+        .cards
+          - current_player.hand.each do |card|
+            img.card src="/images/cards/#{card.rank}#{card.suit}.svg"
   .panel.panel--books
     .panel__header
       span Your Books

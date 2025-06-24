@@ -66,12 +66,12 @@ RSpec.describe Server do
       expect(session2).to have_content('Game')
     end
 
-    it 'displays hand' do
+    fit 'displays hand' do
       session2.click_on 'Start Game'
       session1.driver.refresh
       session1.click_on 'Start Game'
-      expect(session1).to have_content('is, A')
-      expect(session2).to_not have_content('is, A')
+      expect(session1).to have_css("img[src*='/images/cards/AH.svg']")
+      expect(session2).to_not have_css("img[src*='/images/cards/AH.svg']")
     end
 
     it 'advances round on request' do
