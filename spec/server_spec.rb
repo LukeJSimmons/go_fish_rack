@@ -49,9 +49,9 @@ RSpec.describe Server do
         session.fill_in :name, with: player_name
         session.click_on 'Join'
       end
-      expect(session2).to have_content('You are Player 2')
+      expect(session2).to have_content('Player 2 (you)')
       session1.refresh
-      expect(session1).to have_content('You are Player 1')
+      expect(session1).to have_content('Player 1 (you)')
     end
 
      it 'allows multiple players to join game' do

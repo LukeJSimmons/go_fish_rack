@@ -1,12 +1,13 @@
 require_relative 'deck'
 
 class Game
-  attr_accessor :players, :deck, :players_needed_to_start
+  attr_accessor :players, :deck, :players_needed_to_start, :round
 
   def initialize
     @players = []
     @deck = Deck.new
-    @players_needed_to_start = 1
+    @players_needed_to_start = 2
+    @round = 0
   end
 
   def add_player(player)
@@ -18,13 +19,19 @@ class Game
   end
 
   def start
-    return if players.any? { |player| player.hand.count > 0 }
-
     deal_cards
   end
 
   def players_needed
     players_needed_to_start - players.count
+  end
+
+  def advance_round
+    self.round += 1
+  end
+
+  def started?
+    deck.count < 52
   end
 
   private

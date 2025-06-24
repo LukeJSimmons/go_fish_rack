@@ -1,16 +1,20 @@
 .panel {
+  display: grid;
+  /* 60px */
+  grid-template-rows: calc(var(--op-size-unit) * 15) 1fr;
   height: 100%;
 
   .panel__header {
-    /* 60px */
-    --gf-header-height: calc(var(--op-size-unit) * 15);
-
     display: flex;
     align-items: center;
     height: var(--gf-header-height);
     box-shadow: inset var(--op-border-top) var(--op-color-border);
     padding: var(--op-space-2x-small) var(--op-space-medium);
     font-size: var(--op-font-large);
+  }
+
+  .panel__content {
+
   }
 
   &.panel--feed {

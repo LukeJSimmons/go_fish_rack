@@ -1,3 +1,17 @@
 .feed {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   padding: var(--op-space-medium);
+
+  .feed__request-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+
+    .feed__submit {
+      grid-column: span 2;
+    }
+  }
 }

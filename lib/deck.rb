@@ -15,6 +15,10 @@ class Deck
     cards.pop
   end
 
+  def count
+    cards.count
+  end
+
   private
 
   def build_cards
