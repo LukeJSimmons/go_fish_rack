@@ -62,10 +62,9 @@ RSpec.describe Server do
         session.visit '/'
         session.fill_in :name, with: player_name
         session.click_on 'Join'
-        expect(session).to have_css('.players__player', text: player_name)
       end
       session1.driver.refresh
-      expect(session1).to have_content('Players')
+      expect(session1).to have_content('Game')
       expect(session2).to have_content('Player 1')
       expect(session1).to have_content('Player 2')
     end

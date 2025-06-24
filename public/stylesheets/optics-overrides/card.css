@@ -1,0 +1,7 @@
+.card {
+  &.card--join-form,
+  &.card--lobby {
+    width: calc(var(--op-size-unit) * 100);
+    padding: var(--op-space-large);
+  }
+}

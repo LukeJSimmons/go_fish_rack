@@ -1,5 +1,17 @@
-p Lobby
-ul
-  - game.players.each do |player|
-    li.players__player = player.name
-p = "You are " + current_player.name
+.lobby
+  .card.card--lobby
+    .card__header
+      span Lobby
+    .card__content
+      table.table.table--primary
+        thead
+          tr
+            th Players
+        tbody
+          - game.players.each do |player|
+            tr
+              td = player.name
+          - game.players_needed.times do
+            tr
+              td Waiting for players...
+      p = "You are " + current_player.name

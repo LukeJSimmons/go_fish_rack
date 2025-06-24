@@ -39,4 +39,12 @@ RSpec.describe Game do
     }.to change(game.deck.cards, :count).by (-14)
     end
   end
+
+  describe '#players_needed' do
+    it 'returns however many players are needed to start the game' do
+      expect(game.players_needed).to eq 2
+      game.add_player(Player.new('Player 1'))
+      expect(game.players_needed).to eq 1
+    end
+  end
 end

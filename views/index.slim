@@ -1,3 +1,9 @@
-form.form-group action="/join" method="post"
-  input#name.form-control type="text" name="name" required="true"
-  button.btn.btn--primary type="submit" Join
+.join-form
+  .card.card--join-form
+    .card__header
+      span Go Fish the Logo
+    .card__content
+      form.form-group action="/join" method="post"
+        label.form-label for="name" Input your name
+        input#name.form-control type="text" name="name"
+        button.btn.btn--primary type="submit" Join
