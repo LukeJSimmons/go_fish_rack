@@ -47,4 +47,27 @@ RSpec.describe Game do
       expect(game.players_needed).to eq 1
     end
   end
+
+  describe '#advance_round' do
+    it 'increases round by 1' do
+      expect {
+        game.advance_round
+    }.to change(game, :round).by 1
+    end
+  end
+
+  describe '#started?' do
+    context 'when game has not started' do
+      it 'returns false' do
+        expect(game.started?).to eq false
+      end
+    end
+
+    context 'when game has started' do
+      it 'returns true' do
+        game.deck.draw_card
+        expect(game.started?).to eq true
+      end
+    end
+  end
 end
