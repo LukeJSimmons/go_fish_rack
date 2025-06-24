@@ -2,4 +2,5 @@ p Players
 ul
   - game.players.each do |player|
     li.players__player = player.name
-p = "You are " + current_player.name
+p = "You are #{current_player.name}"
+p = "You're hand is, #{current_player.hand.join(' ')}"
