@@ -1,5 +1,5 @@
 .game-layout
-  .panel
+  .panel.panel--player-decks
     .panel__header
       span Game
     .panel__content
@@ -7,20 +7,25 @@
         span Players
         ul
           - game.players.each do |player|
-            li.players__player = player.name
-        span = "You are #{current_player.name}"
-  .panel
+            li.players__player
+              = player.name
+              - if player.name == current_player.name
+                = " (you)"
+  .panel.panel--feed
     .panel__header
       span Game Feed
     .panel__content
-      span Player 1 asked for 8s from Player 2
-  .panel
+      .feed
+        span Player 1 asked for 8s from Player 2
+  .panel.panel--hand
     .panel__header
       span Your Hand
     .panel__content
-      span = "You're hand is, #{current_player.hand.map(&:rank).join(' ')}"
-  .panel
+      .hand
+        span = "You're hand is, #{current_player.hand.map(&:rank).join(' ')}"
+  .panel.panel--books
     .panel__header
       span Your Books
     .panel__content
-      span Books
+      .book
+        span Books

@@ -6,7 +6,7 @@ class Game
   def initialize
     @players = []
     @deck = Deck.new
-    @players_needed_to_start = 2
+    @players_needed_to_start = 1
   end
 
   def add_player(player)

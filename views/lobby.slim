@@ -10,10 +10,12 @@
         tbody
           - game.players.each do |player|
             tr
-              td = player.name
+              td
+                = player.name
+                - if player.name == current_player.name
+                  = " (you)"
           - game.players_needed.times do
             tr
               td Waiting for players...
-      p = "You are " + current_player.name
       - if game.players_needed == 0
         a.btn href="/game" Start Game
