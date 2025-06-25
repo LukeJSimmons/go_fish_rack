@@ -82,6 +82,20 @@ RSpec.describe Server do
       session1.click_on 'Request'
       expect(session1).to have_content('Round: 1')
     end
+
+    it 'only contains valid targets' do
+      session2.click_on 'Start Game'
+      expect(session2).to have_selector("option", :text=>"Player 1")
+      expect(session2).to_not have_selector("option", :text=>"Player 2")
+    end
+
+    fit 'only contains valid rank requests' do
+      session2.click_on 'Start Game'
+      expect(session2).to have_selector("option", :text=>"K")
+      expect(session2).to have_selector("option", :text=>"Q")
+      expect(session2).to have_selector("option", :text=>"J")
+      expect(session2).to_not have_selector("option", :text=>"2")
+    end
   end
 
   describe 'API key authorization' do
