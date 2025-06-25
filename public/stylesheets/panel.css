@@ -7,14 +7,11 @@
   .panel__header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: var(--gf-header-height);
     box-shadow: inset var(--op-border-top) var(--op-color-border);
     padding: var(--op-space-2x-small) var(--op-space-medium);
     font-size: var(--op-font-large);
-  }
-
-  .panel__content {
-
   }
 
   &.panel--feed {

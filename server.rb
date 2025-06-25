@@ -37,8 +37,8 @@ class Server < Sinatra::Base
   end
 
   get '/lobby' do
-    error 401 unless session[:current_player].api_key == session_key
-    redirect '/' if self.class.game.empty?
+    error 401 unless session[:current_player]&.api_key == session_key
+    redirect '/' if self.class.game.empty? || !session[:current_player]
 
     respond_to do |format|
       format.json {  }
@@ -47,7 +47,7 @@ class Server < Sinatra::Base
   end
 
   get '/game' do
-    error 401 unless session[:current_player].api_key == session_key
+    error 401 unless session[:current_player]&.api_key == session_key
     redirect '/' if self.class.game.empty?
 
     self.class.game.start unless self.class.game.started?
@@ -62,7 +62,7 @@ class Server < Sinatra::Base
   end
 
   post '/game' do
-    error 401 unless session[:current_player].api_key == session_key
+    error 401 unless session[:current_player]&.api_key == session_key
     self.class.game.advance_round
 
     respond_to do |format|

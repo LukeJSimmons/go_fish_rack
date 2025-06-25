@@ -1,3 +1,20 @@
 .cards {
+  --gf-card-height: 18rem;
+  --gf-card-overlap: -6rem;
+
   display: flex;
+  padding: var(--op-space-medium);
+
+  &.cards--books {
+    --gf-card-height: 14rem;
+  }
+
+  > * {
+    margin-right: var(--gf-card-overlap);
+  }
+
+  .cards__card {
+    height: var(--gf-card-height);
+    box-shadow: var(--op-shadow-medium);
+  }
 }

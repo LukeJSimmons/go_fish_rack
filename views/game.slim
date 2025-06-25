@@ -38,10 +38,11 @@
       .hand
         .cards
           - current_player.hand.each do |card|
-            img.card src="/images/cards/#{card.rank}#{card.suit}.svg"
+            img.cards__card src="/images/cards/#{card.rank}#{card.suit}.svg"
   .panel.panel--books
     .panel__header
       span Your Books
     .panel__content
-      .book
-        span Books
+      .books
+        .cards.cards--books
+          img.cards__card src="/images/cards/2C.svg"
