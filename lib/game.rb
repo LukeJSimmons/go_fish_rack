@@ -1,13 +1,15 @@
 require_relative 'deck'
+require_relative 'round_result'
 
 class Game
-  attr_accessor :players, :deck, :players_needed_to_start, :round
+  attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results
 
   def initialize
     @players = []
     @deck = Deck.new
     @players_needed_to_start = 2
     @round = 0
+    @round_results = []
   end
 
   def add_player(player)
@@ -28,7 +30,9 @@ class Game
 
   def play_round(target, request)
     advance_round
-    "You asked #{target} for a #{request}"
+    result = RoundResult.new(target, request)
+    self.round_results << result
+    result
   end
 
   def started?

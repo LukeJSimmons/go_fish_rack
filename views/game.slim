@@ -18,16 +18,17 @@
     .panel__content
       .feed
         .feed__actions
-          .feed__bubble.feed__bubble--player-action
-            span Player 1 asked for 8s from Player 2
-          .feed__response
-            i.icon.ph.ph-arrow-elbow-down-right
-            .feed__bubble.feed__bubble--player-response
-              span Player 1 asked for 8s from Player 2
-          .feed__response
-            i.icon.ph.ph-arrow-elbow-down-right
-            .feed__bubble.feed__bubble--game-response
-              span Player 1 asked for 8s from Player 2
+          - game.round_results.each do |round_result|
+            .feed__bubble.feed__bubble--player-action
+              span = round_result.player_action
+            .feed__response
+              i.icon.ph.ph-arrow-elbow-down-right
+              .feed__bubble.feed__bubble--player-response
+                span = round_result.player_response
+            .feed__response
+              i.icon.ph.ph-arrow-elbow-down-right
+              .feed__bubble.feed__bubble--game-response
+                span = round_result.game_response
         form.feed__request-form  action="/game" method="post"
           .form-group
             label.form-label for="target" Player

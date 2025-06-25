@@ -57,10 +57,15 @@ RSpec.describe Game do
     }.to change(game, :round).by 1
     end
 
-    it 'returns a string containing target and request' do
+    it 'returns a RoundResult object' do
       round_result = game.play_round(target, request)
-      expect(round_result).to match (/Player 2/i)
-      expect(round_result).to match (/A/i)
+      expect(round_result).to respond_to :target
+    end
+
+    it 'adds round result to round_results' do
+      expect {
+        game.play_round(target, request)
+    }.to change(game.round_results, :count).by 1
     end
   end
 

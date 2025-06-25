@@ -83,6 +83,14 @@ RSpec.describe Server do
       expect(session1).to have_content('Round: 1')
     end
 
+    it 'adds result to the feed' do
+      session2.click_on 'Start Game'
+      session1.driver.refresh
+      session1.click_on 'Start Game'
+      session1.click_on 'Request'
+      expect(session1).to have_content('You asked Player 2 for As')
+    end
+
     it 'only contains valid targets' do
       session2.click_on 'Start Game'
       expect(session2).to have_selector("option", :text=>"Player 1")
