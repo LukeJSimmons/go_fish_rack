@@ -4,6 +4,9 @@
   grid-template-rows: calc(var(--op-size-unit) * 15) 1fr;
   height: 100%;
 
+  background-color: var(--op-color-primary-plus-max);
+  color: var(--op-color-primary-on-plus-max);
+
   .panel__header {
     display: flex;
     align-items: center;
@@ -24,5 +27,15 @@
 
   &.panel--books {
     box-shadow: inset var(--op-border-width) var(--op-border-width) 0 0 var(--op-color-border);
+  }
+
+  &.panel--highlight {
+    background-color: var(--op-color-primary-plus-eight);
+    color: var(--op-color-primary-on-plus-eight);
+  }
+
+  &.panel--tray {
+    background-color: var(--op-color-neutral-plus-eight);
+    color: var(--op-color-neutral-on-plus-eight);
   }
 }

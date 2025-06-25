@@ -11,13 +11,23 @@
               = player.name
               - if player.name == current_player.name
                 = " (you)"
-  .panel.panel--feed
+  .panel.panel--feed.panel--highlight
     .panel__header
       span Game Feed
       span = "Round: #{game.round}"
     .panel__content
       .feed
-        span Player 1 asked for 8s from Player 2
+        .feed__actions
+          .feed__bubble.feed__bubble--player-action
+            span Player 1 asked for 8s from Player 2
+          .feed__response
+            i.icon.ph.ph-arrow-elbow-down-right
+            .feed__bubble.feed__bubble--player-response
+              span Player 1 asked for 8s from Player 2
+          .feed__response
+            i.icon.ph.ph-arrow-elbow-down-right
+            .feed__bubble.feed__bubble--game-response
+              span Player 1 asked for 8s from Player 2
         form.feed__request-form  action="/game" method="post"
           .form-group
             label.form-label for="target" Player
@@ -31,7 +41,7 @@
               - current_player.hand.map(&:rank).uniq.each do |rank|
                   option = rank
           button.btn.btn--primary.feed__submit type="submit" Request
-  .panel.panel--hand
+  .panel.panel--hand.panel--tray
     .panel__header
       span Your Hand
     .panel__content
@@ -39,7 +49,7 @@
         .cards
           - current_player.hand.each do |card|
             img.cards__card src="/images/cards/#{card.rank}#{card.suit}.svg"
-  .panel.panel--books
+  .panel.panel--books.panel--tray
     .panel__header
       span Your Books
     .panel__content
