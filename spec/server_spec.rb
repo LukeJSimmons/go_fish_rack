@@ -89,7 +89,7 @@ RSpec.describe Server do
       expect(session2).to_not have_selector("option", :text=>"Player 2")
     end
 
-    fit 'only contains valid rank requests' do
+    it 'only contains valid rank requests' do
       session2.click_on 'Start Game'
       expect(session2).to have_selector("option", :text=>"K")
       expect(session2).to have_selector("option", :text=>"Q")

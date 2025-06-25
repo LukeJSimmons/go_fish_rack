@@ -24,6 +24,7 @@ class Server < Sinatra::Base
 
   post '/join' do
     player = Player.new(params['name'])
+    player.api_key = Base64.urlsafe_encode64(player.name)
     session[:current_player] = player
     session[:api_key] = player.api_key
     self.class.game.add_player(player)
@@ -63,10 +64,10 @@ class Server < Sinatra::Base
 
   post '/game' do
     error 401 unless session[:current_player]&.api_key == session_key
-    self.class.game.advance_round
+    round_result = self.class.game.play_round(params[:target], params[:request])
 
     respond_to do |format|
-      format.json { json target: params[:target], request: params[:request] }
+      format.json { json round_result: round_result }
       format.html { redirect '/game' }
     end
   end

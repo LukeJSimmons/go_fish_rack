@@ -48,11 +48,19 @@ RSpec.describe Game do
     end
   end
 
-  describe '#advance_round' do
+  describe '#play_round' do
+    let(:target) { 'Player 2' }
+    let(:request) { 'A' }
     it 'increases round by 1' do
       expect {
-        game.advance_round
+        game.play_round(target, request)
     }.to change(game, :round).by 1
+    end
+
+    it 'returns a string containing target and request' do
+      round_result = game.play_round(target, request)
+      expect(round_result).to match (/Player 2/i)
+      expect(round_result).to match (/A/i)
     end
   end
 

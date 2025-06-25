@@ -5,7 +5,6 @@ class Player
   def initialize(name)
     @name = name
     @hand = []
-    @api_key = Base64.urlsafe_encode64(name)
   end
 
   def add_card_to_hand(card)

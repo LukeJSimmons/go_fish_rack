@@ -26,8 +26,9 @@ class Game
     players_needed_to_start - players.count
   end
 
-  def advance_round
-    self.round += 1
+  def play_round(target, request)
+    advance_round
+    "You asked #{target} for a #{request}"
   end
 
   def started?
@@ -40,5 +41,9 @@ class Game
     players.each do |player|
       7.times { player.add_card_to_hand(deck.draw_card) }
     end
+  end
+
+  def advance_round
+    self.round += 1
   end
 end
