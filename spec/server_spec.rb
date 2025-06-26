@@ -75,24 +75,32 @@ RSpec.describe Server do
       expect(session2).to have_content('Game')
     end
 
-    it 'displays hand' do
-      expect(session1).to have_css("img[src*='/images/cards/AH.svg']")
-      expect(session2).to_not have_css("img[src*='/images/cards/AH.svg']")
-    end
-
     it 'advances round on request' do
       expect(session1).to have_content('Round: 1')
       session1.click_on 'Request'
       expect(session1).to have_content('Round: 2')
     end
 
-    describe 'feed' do
-      it 'adds player action to the feed' do
-        session1.click_on 'Request'
-        expect(session1).to have_content('You asked Player 2 for As')
-        expect(session1).to have_content("Go Fish: Player 2 didn't have any As")
+    describe 'hand' do
+      it 'displays hand' do
+        Server.game.current_player.hand.each do |card|
+          expect(session1).to have_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
+          expect(session2).to have_no_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
+        end
       end
 
+      it 'displays hand with new cards' do
+        session_player = Server.game.current_player
+        session1.click_on 'Request'
+        session2.driver.refresh
+        session_player.hand.each do |card|
+          expect(session1).to have_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
+          expect(session2).to have_no_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
+        end
+      end
+    end
+
+    describe 'feed' do
       context 'when target does not have request' do
         before do
           session1.select 'A', from: 'Request'

@@ -8,4 +8,8 @@ class Card
     @rank = rank
     @suit = suit
   end
+
+  def <=>(other_card)
+    RANKS.find_index(rank) <=> RANKS.find_index(other_card.rank)
+  end
 end
