@@ -21,7 +21,7 @@ RSpec.describe Server do
   after do
     Server.game.players.clear
     Server.game.deck.reset
-    Server.game.round = 1
+    Server.game.round = 0
     Capybara.reset_sessions!
   end
 
@@ -90,6 +90,11 @@ RSpec.describe Server do
     it 'only contains valid rank requests' do
       expect(session2).to have_selector("option", :text=>"K")
       # expect(session2).to have_select "request", options: ['K','Q','J']
+    end
+
+    it 'disables the request button when it is not your turn' do
+      expect(session2).to have_button("Request", disabled: true)
+      expect(session1).to have_button("Request", disabled: false)
     end
   end
 

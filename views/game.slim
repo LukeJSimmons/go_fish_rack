@@ -2,6 +2,7 @@
   .panel.panel--player-decks
     .panel__header
       span Game
+      span = "#{game.current_player.name}"
     .panel__content
       .player-decks
         span Players
@@ -14,7 +15,7 @@
   .panel.panel--feed.panel--highlight
     .panel__header
       span Game Feed
-      span = "Round: #{game.round}"
+      span = "Round: #{game.round+1}"
     .panel__content
       .feed
         .feed__actions
@@ -41,7 +42,10 @@
             select#request.form-control name="request"
               - current_player.hand.map(&:rank).uniq.each do |rank|
                   option = rank
-          button.btn.btn--primary.feed__submit type="submit" Request
+          - if game.current_player == current_player
+            button.btn.btn--primary.feed__submit type="submit" Request
+          - else
+            button.btn.btn--primary.feed__submit.btn--disabled type="submit" disabled="true" Request
   .panel.panel--hand.panel--tray
     .panel__header
       span Your Hand

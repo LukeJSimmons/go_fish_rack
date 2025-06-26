@@ -11,7 +11,7 @@ class Game
     @players = []
     @deck = Deck.new
     @players_needed_to_start = 2
-    @round = 1
+    @round = 0
     @round_results = []
   end
 
@@ -32,9 +32,9 @@ class Game
   end
 
   def play_round(target, request)
-    advance_round
     result = RoundResult.new(target:, request:, current_player:, matching_cards: [], drawn_card: nil)
     self.round_results << result
+    advance_round
     result
   end
 
@@ -47,7 +47,7 @@ class Game
   end
 
   def current_player
-    players[players.count%round]
+    players[round%players.count] unless players.count == 0
   end
 
   def reset
