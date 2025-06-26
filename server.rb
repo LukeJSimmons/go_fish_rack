@@ -19,7 +19,7 @@ class Server < Sinatra::Base
   end
 
   get '/' do
-    slim :index
+    format.html { slim :index }
   end
 
   post '/join' do
@@ -38,8 +38,8 @@ class Server < Sinatra::Base
   end
 
   get '/lobby' do
-    error 401 unless session[:current_player]&.api_key == session_key
-    redirect '/' if self.class.game.empty? || !session[:current_player]
+    error 401 unless is_valid_player?(session[:current_player])
+    # redirect '/' if self.class.game.empty? || !session[:current_player]
 
     respond_to do |format|
       format.json {  }
@@ -48,13 +48,13 @@ class Server < Sinatra::Base
   end
 
   get '/game' do
-    error 401 unless session[:current_player]&.api_key == session_key
-    redirect '/' if self.class.game.empty?
+    error 401 unless is_valid_player?(session[:current_player])
+    # redirect '/' if self.class.game.empty?
 
     self.class.game.start unless self.class.game.started?
 
     respond_to do |format|
-      format.json { json players: self.class.game.players }
+      format.json { json players: self.class.game.players, current_player: session[:current_player] }
       format.html do
         redirect '/lobby' unless self.class.game.players.count == self.class.game.players_needed_to_start
         slim :game, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } }
@@ -63,7 +63,7 @@ class Server < Sinatra::Base
   end
 
   post '/game' do
-    error 401 unless session[:current_player]&.api_key == session_key
+    error 401 unless is_valid_player?(session[:current_player])
     round_result = self.class.game.play_round(params[:target], params[:request])
 
     respond_to do |format|
@@ -80,6 +80,11 @@ class Server < Sinatra::Base
 
   def session_key
     return session[:api_key] unless request.content_type == 'application/json'
+    return :invalid_key unless request.env["HTTP_AUTHORIZATION"]
     auth.username
+  end
+
+  def is_valid_player?(player)
+    player&.api_key == session_key && player
   end
 end

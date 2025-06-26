@@ -97,7 +97,7 @@ RSpec.describe Server do
       expect(session1).to have_button("Request", disabled: false)
     end
 
-    fit 'displays session current_player to all players' do
+    it 'displays session current_player to all players' do
       expect(session2).to have_content("Player 1's turn")
       expect(session1).to have_content("Player 1's turn")
       session1.click_on "Request"
@@ -108,29 +108,30 @@ RSpec.describe Server do
   end
 
   describe 'API key authorization' do
-    before do
-      post '/join', { 'name' => 'Caleb' }.to_json, {
-        'Accept' => 'application/json',
-        'CONTENT_TYPE' => 'application/json'
-      }
+    context 'when client has API key' do
+      before do
+        post '/join', { 'name' => 'Caleb' }.to_json, {
+          'Accept' => 'application/json',
+          'CONTENT_TYPE' => 'application/json'
+        }
+      end
+
+      it 'returns game status via API' do
+        api_key = JSON.parse(last_response.body)['api_key']
+        expect(api_key).not_to be_nil
+        get '/game', nil, {
+          'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+          'Accept' => 'application/json',
+          'CONTENT_TYPE' => 'application/json'
+        }
+        expect(JSON.parse(last_response.body).keys).to include 'players'
+      end
     end
 
-    it 'returns game status via API' do
-      api_key = JSON.parse(last_response.body)['api_key']
-      expect(api_key).not_to be_nil
-      get '/game', nil, {
-        'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
-        'Accept' => 'application/json',
-        'CONTENT_TYPE' => 'application/json'
-      }
-      expect(JSON.parse(last_response.body).keys).to include 'players'
-    end
-
-    context 'when client does not have API key' do
+    fcontext 'when client does not have API key' do
       context 'GET /game' do
         it 'returns 401 error' do
           get '/game', nil, {
-            'HTTP_AUTHORIZATION' => "invalid",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
