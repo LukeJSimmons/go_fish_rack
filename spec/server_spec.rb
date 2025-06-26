@@ -89,7 +89,7 @@ RSpec.describe Server do
       it 'adds player action to the feed' do
         session1.click_on 'Request'
         expect(session1).to have_content('You asked Player 2 for As')
-        expect(session1).to have_content("Go Fish: Player 2 doesn't have any As")
+        expect(session1).to have_content("Go Fish: Player 2 didn't have any As")
       end
 
       context 'when target does not have request' do
@@ -97,9 +97,16 @@ RSpec.describe Server do
           session1.select 'A', from: 'Request'
         end
 
-        it 'adds player response to the feed' do
+        it 'displays that target does not have request' do
           session1.click_on 'Request'
-          expect(session1).to have_content("Go Fish: Player 2 doesn't have any As")
+          expect(session1).to have_content("Go Fish: Player 2 didn't have any As")
+        end
+
+        it 'display drawn card to current_player' do
+          session1.click_on 'Request'
+          expect(session1).to have_content("You drew a J")
+          session2.driver.refresh
+          expect(session2).to have_content("Player 1 drew a card")
         end
       end
 

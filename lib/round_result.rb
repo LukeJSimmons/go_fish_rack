@@ -10,24 +10,29 @@ class RoundResult
   end
 
   def player_action(recipient)
-    "#{subject(recipient)} asked #{target.name} for #{request}s"
+    "#{subject(recipient)} asked #{object(recipient)} for #{request}s"
   end
 
   def player_response(recipient)
-    return "#{subject(recipient)} took #{matching_cards.count} #{request}s from #{target.name}" unless matching_cards.empty?
-    "Go Fish: #{target.name} doesn't have any #{request}s"
+    return "#{subject(recipient)} took #{matching_cards.count} #{request}s from #{object(recipient)}" unless matching_cards.empty?
+    "Go Fish: #{object(recipient)} #{object(recipient) == 'You' ? "don't" : "didn't"} have any #{request}s"
   end
 
-  def game_response
-    return "You drew a #{drawn_card}" unless drawn_card == ""
-    ""
+  def game_response(recipient)
+    return unless drawn_card
+    return "You drew a #{drawn_card.rank}" if recipient == current_player
+    "#{subject(recipient)} drew a card"
   end
 
   private
 
-  # Subject
   def subject(recipient)
     return "You" if recipient == current_player
     current_player.name
+  end
+
+  def object(recipient)
+    return "You" if recipient == target
+    target.name
   end
 end

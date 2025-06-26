@@ -101,6 +101,18 @@ RSpec.describe Game do
           expect(round.current_player.hand.count).to eq 9
         end
       end
+
+      context 'when target does not have matching_cards' do
+        let(:request) { 'A' }
+        let(:round) { game.play_round(target, request) }
+        before do
+          game.start
+        end
+
+        it 'adds a card from the deck to current_player hand' do
+          expect(round.current_player.hand.count).to eq 8
+        end
+      end
     end
 
     describe '#started?' do

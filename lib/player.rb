@@ -9,5 +9,6 @@ class Player
 
   def add_card_to_hand(card)
     hand.push(card)
+    card
   end
 end

@@ -34,9 +34,14 @@ class Game
   def play_round(target, request)
     matching_cards = get_matching_cards(target, request)
     take_cards_from_player(matching_cards, target)
-    result = RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card: nil)
+
+    drawn_card = current_player.add_card_to_hand(deck.draw_card) if matching_cards.empty?
+
+    result = RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:)
     self.round_results << result
+
     advance_round
+
     result
   end
 
