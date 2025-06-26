@@ -85,24 +85,51 @@ RSpec.describe Server do
       expect(session1).to have_content('Round: 2')
     end
 
-    it 'adds result to the feed' do
-      session1.click_on 'Request'
-      expect(session1).to have_content('You asked Player 2 for As')
+    describe 'feed' do
+      it 'adds player action to the feed' do
+        session1.click_on 'Request'
+        expect(session1).to have_content('You asked Player 2 for As')
+        expect(session1).to have_content("Go Fish: Player 2 doesn't have any As")
+      end
+
+      context 'when target does not have request' do
+        before do
+          session1.select 'A', from: 'Request'
+        end
+
+        it 'adds player response to the feed' do
+          session1.click_on 'Request'
+          expect(session1).to have_content("Go Fish: Player 2 doesn't have any As")
+        end
+      end
+
+      context 'when target has request' do
+        before do
+          session1.select 'K', from: 'Request'
+        end
+
+        it 'adds player response to the feed' do
+          session1.click_on 'Request'
+          expect(session1).to have_content("You took 1 Ks from Player 2")
+        end
+      end
     end
 
-    it 'only contains valid targets' do
-      expect(session2).to have_selector("option", :text=>"Player 1")
-      expect(session2).to_not have_selector("option", :text=>"Player 2")
-    end
+    describe 'feed__request-form' do
+      it 'only contains valid targets' do
+        expect(session2).to have_selector("option", :text=>"Player 1")
+        expect(session2).to_not have_selector("option", :text=>"Player 2")
+      end
 
-    it 'only contains valid rank requests' do
-      expect(session2).to have_selector("option", :text=>"K")
-      # expect(session2).to have_select "request", options: ['K','Q','J']
-    end
+      it 'only contains valid rank requests' do
+        expect(session2).to have_selector("option", :text=>"K")
+        # expect(session2).to have_select "request", options: ['K','Q','J']
+      end
 
-    it 'disables the request button when it is not your turn' do
-      expect(session2).to have_button("Request", disabled: true)
-      expect(session1).to have_button("Request", disabled: false)
+      it 'disables the request button when it is not your turn' do
+        expect(session2).to have_button("Request", disabled: true)
+        expect(session1).to have_button("Request", disabled: false)
+      end
     end
 
     it 'displays session current_player to all players' do

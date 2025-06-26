@@ -32,8 +32,9 @@ class Game
   end
 
   def play_round(target, request)
-    take_cards_from_player(matching_cards(target, request), target)
-    result = RoundResult.new(target:, request:, current_player:, matching_cards: matching_cards(target, request), drawn_card: nil)
+    matching_cards = get_matching_cards(target, request)
+    take_cards_from_player(matching_cards, target)
+    result = RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card: nil)
     self.round_results << result
     advance_round
     result
@@ -58,7 +59,7 @@ class Game
     current_player.hand += cards
   end
 
-  def matching_cards(target, request)
+  def get_matching_cards(target, request)
     target.hand.select { |card| card.rank == request }
   end
 
