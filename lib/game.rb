@@ -4,11 +4,14 @@ require_relative 'round_result'
 class Game
   attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results
 
+  BASE_DECK_SIZE = 52
+  BASE_HAND_SIZE = 7
+
   def initialize
     @players = []
     @deck = Deck.new
     @players_needed_to_start = 2
-    @round = 0
+    @round = 1
     @round_results = []
   end
 
@@ -30,24 +33,32 @@ class Game
 
   def play_round(target, request)
     advance_round
-    result = RoundResult.new(target, request)
+    result = RoundResult.new(target:, request:, current_player:, matching_cards: [], drawn_card: nil)
     self.round_results << result
     result
   end
 
   def started?
-    deck.count < 52
+    deck.count < BASE_DECK_SIZE
+  end
+
+  def advance_round
+    self.round += 1
+  end
+
+  def current_player
+    players[players.count%round]
+  end
+
+  def reset
+    initialize
   end
 
   private
 
   def deal_cards
     players.each do |player|
-      7.times { player.add_card_to_hand(deck.draw_card) }
+      BASE_HAND_SIZE.times { player.add_card_to_hand(deck.draw_card) }
     end
-  end
-
-  def advance_round
-    self.round += 1
   end
 end

@@ -48,9 +48,25 @@ RSpec.describe Game do
     end
   end
 
+  describe '#current_player' do
+    context 'on round 1' do
+      it 'returns player 1' do
+        expect(game.current_player).to eq game.players.first
+      end
+    end
+
+    context 'on round 2' do
+      it 'returns player 2' do
+        game.advance_round
+        expect(game.current_player).to eq game.players[1]
+      end
+    end
+  end
+
   describe '#play_round' do
     let(:target) { 'Player 2' }
     let(:request) { 'A' }
+
     it 'increases round by 1' do
       expect {
         game.play_round(target, request)
