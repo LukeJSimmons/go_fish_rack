@@ -10,12 +10,12 @@ class RoundResult
   end
 
   def player_action(recipient)
-    "#{subject(recipient)} asked #{target} for #{request}s"
+    "#{subject(recipient)} asked #{target.name} for #{request}s"
   end
 
   def player_response(recipient)
-    return "#{subject(recipient)} took #{matching_cards.count} #{request}s from #{target}" unless matching_cards.empty?
-    "Go Fish: #{target} doesn't have any #{request}s"
+    return "#{subject(recipient)} took #{matching_cards.count} #{request}s from #{target.name}" unless matching_cards.empty?
+    "Go Fish: #{target.name} doesn't have any #{request}s"
   end
 
   def game_response

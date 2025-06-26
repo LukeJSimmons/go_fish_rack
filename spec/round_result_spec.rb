@@ -2,7 +2,7 @@ require 'round_result'
 require 'player'
 
 RSpec.describe RoundResult do
-  let(:target) { 'Player 2' }
+  let(:target) { Player.new('Player 2') }
   let(:request) { 'A' }
   let(:current_player) { Player.new('Player 1') }
   let(:matching_cards) { ['A','A'] }
@@ -11,7 +11,7 @@ RSpec.describe RoundResult do
 
   describe '#player_action' do
     it 'returns a message containing target and request' do
-      expect(result.player_action(current_player)).to include target
+      expect(result.player_action(current_player)).to include 'Player 2'
       expect(result.player_action(current_player)).to include request
     end
     context 'when displaying to current_player' do
@@ -22,7 +22,7 @@ RSpec.describe RoundResult do
 
     context 'when displaying to opponents' do
       it 'displays message in the third person' do
-        expect(result.player_action(:opponents)).to include result.current_player.name
+        expect(result.player_action(:opponents)).to include 'Player 1'
       end
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe RoundResult do
       let(:drawn_card) { 'A' }
 
       it 'returns drawn card' do
-        expect(result.game_response).to include result.drawn_card
+        expect(result.game_response).to include drawn_card
       end
     end
   end

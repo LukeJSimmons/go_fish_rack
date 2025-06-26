@@ -19,7 +19,9 @@ class Server < Sinatra::Base
   end
 
   get '/' do
-    format.html { slim :index }
+    respond_to do |format|
+      format.html { slim :index }
+    end
   end
 
   post '/join' do
@@ -64,7 +66,7 @@ class Server < Sinatra::Base
 
   post '/game' do
     error 401 unless is_valid_player?(session[:current_player])
-    round_result = self.class.game.play_round(params[:target], params[:request])
+    round_result = self.class.game.play_round(get_player_by_name(params[:target]), params[:request])
 
     respond_to do |format|
       format.json { json round_result: round_result }
@@ -86,5 +88,9 @@ class Server < Sinatra::Base
 
   def is_valid_player?(player)
     player&.api_key == session_key && player
+  end
+
+  def get_player_by_name(name)
+    self.class.game.players.find { |player| player.name == name }
   end
 end

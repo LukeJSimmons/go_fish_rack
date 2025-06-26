@@ -128,7 +128,7 @@ RSpec.describe Server do
       end
     end
 
-    fcontext 'when client does not have API key' do
+    context 'when client does not have API key' do
       context 'GET /game' do
         it 'returns 401 error' do
           get '/game', nil, {

@@ -1,6 +1,6 @@
 class Player
-  attr_reader :name, :hand
-  attr_accessor :api_key
+  attr_reader :name
+  attr_accessor :api_key, :hand
 
   def initialize(name)
     @name = name
