@@ -3,7 +3,7 @@
   /* 60px */
   grid-template-rows: calc(var(--op-size-unit) * 15) 1fr;
   height: 100%;
-  /* overflow: hidden; */
+  overflow: hidden;
 
   background-color: var(--op-color-primary-plus-max);
   color: var(--op-color-primary-on-plus-max);
@@ -18,9 +18,9 @@
     font-size: var(--op-font-large);
   }
 
-  /* .panel__content {
+  .panel__content {
     overflow: hidden;
-  } */
+  }
 
   &.panel--feed {
     box-shadow: inset var(--op-border-right) var(--op-color-border);
