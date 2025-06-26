@@ -21,6 +21,7 @@ RSpec.describe Server do
   after do
     Server.game.players.clear
     Server.game.deck.reset
+    Server.game.round = 0
     Capybara.reset_sessions!
   end
 
