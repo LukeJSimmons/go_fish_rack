@@ -77,8 +77,19 @@ RSpec.describe Server do
 
     it 'advances round on request' do
       expect(session1).to have_content('Round: 1')
+      session1.select 'A', from: 'Request'
       session1.click_on 'Request'
       expect(session1).to have_content('Round: 2')
+    end
+
+    it 'displays session current_player to all players' do
+      expect(session2).to have_content("Player 1's turn")
+      expect(session1).to have_content("Player 1's turn")
+      session1.select 'A', from: 'Request'
+      session1.click_on "Request"
+      expect(session1).to have_content("Player 2's turn")
+      session2.driver.refresh
+      expect(session2).to have_content("Player 2's turn")
     end
 
     describe 'hand' do
@@ -151,15 +162,6 @@ RSpec.describe Server do
         expect(session2).to have_button("Request", disabled: true)
         expect(session1).to have_button("Request", disabled: false)
       end
-    end
-
-    it 'displays session current_player to all players' do
-      expect(session2).to have_content("Player 1's turn")
-      expect(session1).to have_content("Player 1's turn")
-      session1.click_on "Request"
-      expect(session1).to have_content("Player 2's turn")
-      session2.driver.refresh
-      expect(session2).to have_content("Player 2's turn")
     end
   end
 

@@ -35,12 +35,12 @@ class Game
     matching_cards = get_matching_cards(target, request)
     take_cards_from_player(matching_cards, target)
 
-    drawn_card = current_player.add_card_to_hand(deck.draw_card) if matching_cards.empty?
+    drawn_card = fish_card(request) if matching_cards.empty?
 
     result = RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:)
     self.round_results << result
 
-    advance_round
+    advance_round if drawn_card && drawn_card.rank != request
 
     result
   end
@@ -66,6 +66,10 @@ class Game
 
   def get_matching_cards(target, request)
     target.hand.select { |card| card.rank == request }
+  end
+
+  def fish_card(request)
+    current_player.add_card_to_hand(deck.draw_card)
   end
 
   def deal_cards

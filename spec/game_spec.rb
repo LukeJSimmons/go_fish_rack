@@ -70,12 +70,6 @@ RSpec.describe Game do
       let(:target) { game.players.last }
       let(:request) { 'J' }
 
-      it 'increases round by 1' do
-        expect {
-          game.play_round(target, request)
-      }.to change(game, :round).by 1
-      end
-
       it 'returns a RoundResult object' do
         round_result = game.play_round(target, request)
         expect(round_result).to respond_to :target
@@ -100,6 +94,12 @@ RSpec.describe Game do
         it 'adds cards to current_player hand' do
           expect(round.current_player.hand.count).to eq 9
         end
+
+        it 'does not increment round' do
+          expect {
+            game.play_round(target, request)
+          }.to_not change(game, :round)
+        end
       end
 
       context 'when target does not have matching_cards' do
@@ -111,6 +111,30 @@ RSpec.describe Game do
 
         it 'adds a card from the deck to current_player hand' do
           expect(round.current_player.hand.count).to eq 8
+        end
+
+        context 'when drawn_card is request' do
+          before do
+            game.deck.cards = [Card.new('A','H')]
+          end
+
+          it 'does not increment round' do
+            expect {
+              game.play_round(target, request)
+            }.to_not change(game, :round)
+          end
+        end
+
+        context 'when drawn_card is not request' do
+          before do
+            game.deck.cards = [Card.new('10','H')]
+          end
+
+          it 'increments round by 1' do
+            expect {
+              game.play_round(target, request)
+          }.to change(game, :round).by 1
+          end
         end
       end
     end
