@@ -30,6 +30,7 @@ RSpec.describe Server do
     Server.game.players.clear
     Server.game.deck.reset
     Server.game.round = 0
+    Server.game.round_results = []
     Capybara.reset_sessions!
   end
 
@@ -118,6 +119,11 @@ RSpec.describe Server do
         it 'adds player response to the feed' do
           session1.click_on 'Request'
           expect(session1).to have_content("You took 1 Ks from Player 2")
+        end
+
+        it 'does not display game response' do
+          session1.click_on 'Request'
+          expect(session1).to have_no_css(".feed__bubble--game-response")
         end
       end
     end

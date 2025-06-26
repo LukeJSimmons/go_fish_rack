@@ -26,10 +26,11 @@
               i.icon.ph.ph-arrow-elbow-down-right
               .feed__bubble.feed__bubble--player-response
                 span = round_result.player_response(current_player)
-            .feed__response
-              i.icon.ph.ph-arrow-elbow-down-right
-              .feed__bubble.feed__bubble--game-response
-                span = round_result.game_response(current_player)
+            - if round_result.drawn_card
+              .feed__response
+                i.icon.ph.ph-arrow-elbow-down-right
+                .feed__bubble.feed__bubble--game-response
+                  span = round_result.game_response(current_player)
         form.feed__request-form  action="/game" method="post"
           .form-group
             label.form-label for="target" Player

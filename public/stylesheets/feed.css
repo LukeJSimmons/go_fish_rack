@@ -11,6 +11,7 @@
     align-items: baseline;
     gap: var(--op-space-x-small);
     overflow: auto;
+    padding-bottom: var(--op-space-large);
 
     .feed__response {
       display: flex;
