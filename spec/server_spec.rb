@@ -4,6 +4,7 @@ require 'rack/test'
 require 'rspec'
 require 'capybara'
 require 'capybara/dsl'
+require 'selenium-webdriver'
 ENV['RACK_ENV'] = 'test'
 require_relative '../server'
 
@@ -13,8 +14,15 @@ RSpec.describe Server do
   def app; Server.new; end
 
   before do
+    Capybara.register_driver :headless_chrome do |app|
+      options = Selenium::WebDriver::Chrome::Options.new
+      options.add_argument('--headless')
+      options.add_argument('--window-size=1280,1024') # Set your desired width and height
+      Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+    end
+
     Capybara.server = :puma, { Silent: true }
-    Capybara.default_driver = :selenium_chrome_headless
+    Capybara.default_driver = :headless_chrome
     Capybara.app = Server.new
   end
 
@@ -41,8 +49,8 @@ RSpec.describe Server do
   end
 
  context 'when there are multiple players' do
-    let(:session1) { Capybara::Session.new(:selenium_chrome_headless, Server.new) }
-    let(:session2) { Capybara::Session.new(:selenium_chrome_headless, Server.new) }
+    let(:session1) { Capybara::Session.new(:headless_chrome, Server.new) }
+    let(:session2) { Capybara::Session.new(:headless_chrome, Server.new) }
 
     before do
       [ session1, session2 ].each_with_index do |session, index|
