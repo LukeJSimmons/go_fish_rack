@@ -96,6 +96,15 @@ RSpec.describe Server do
       expect(session2).to have_button("Request", disabled: true)
       expect(session1).to have_button("Request", disabled: false)
     end
+
+    fit 'displays session current_player to all players' do
+      expect(session2).to have_content("Player 1's turn")
+      expect(session1).to have_content("Player 1's turn")
+      session1.click_on "Request"
+      expect(session1).to have_content("Player 2's turn")
+      session2.driver.refresh
+      expect(session2).to have_content("Player 2's turn")
+    end
   end
 
   describe 'API key authorization' do
