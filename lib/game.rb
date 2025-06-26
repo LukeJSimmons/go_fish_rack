@@ -2,7 +2,7 @@ require_relative 'deck'
 require_relative 'round_result'
 
 class Game
-  attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results
+  attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results, :ignore_books
 
   BASE_DECK_SIZE = 52
   BASE_HAND_SIZE = 7
@@ -37,12 +37,13 @@ class Game
 
     drawn_card = fish_card(request) if matching_cards.empty?
 
-    result = RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:)
-    self.round_results << result
+    current_player.score_books_if_possible unless ignore_books
+
+    self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:))
 
     advance_round if drawn_card && drawn_card.rank != request
 
-    result
+    round_results.last
   end
 
   def started?

@@ -68,7 +68,7 @@ RSpec.describe Game do
 
     describe '#play_round' do
       let(:target) { game.players.last }
-      let(:request) { 'J' }
+      let(:request) { 'K' }
 
       it 'returns a RoundResult object' do
         round_result = game.play_round(target, request)
@@ -84,15 +84,16 @@ RSpec.describe Game do
       context 'when target has matching_cards' do
         let(:round) { game.play_round(target, request) }
         before do
+          game.ignore_books = true
           game.start
         end
 
         it 'removes cards from target hand' do
-          expect(round.target.hand.count).to eq 5
+          expect(round.target.hand.count).to eq 6
         end
 
         it 'adds cards to current_player hand' do
-          expect(round.current_player.hand.count).to eq 9
+          expect(round.current_player.hand.count).to eq 8
         end
 
         it 'does not increment round' do
@@ -100,12 +101,23 @@ RSpec.describe Game do
             game.play_round(target, request)
           }.to_not change(game, :round)
         end
+
+        context 'when matching_cards makes a book' do
+          before do
+            game.ignore_books = false
+          end
+
+          it 'removes book from hand' do
+            expect(round.current_player.hand.map(&:rank)).to_not include "K"
+          end
+        end
       end
 
       context 'when target does not have matching_cards' do
         let(:request) { 'A' }
         let(:round) { game.play_round(target, request) }
         before do
+          game.ignore_books = true
           game.start
         end
 

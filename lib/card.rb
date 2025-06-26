@@ -12,4 +12,9 @@ class Card
   def <=>(other_card)
     RANKS.find_index(rank) <=> RANKS.find_index(other_card.rank)
   end
+
+  def ==(other_card)
+    rank == other_card.rank &&
+    suit == other_card.suit
+  end
 end
