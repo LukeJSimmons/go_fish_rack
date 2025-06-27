@@ -35,9 +35,8 @@ RSpec.describe Player do
       end
 
       it 'adds book to books array' do
-        expect {
-          player.score_books_if_possible
-        }.to change(player.books, :count).by 1
+        player.score_books_if_possible
+        expect(player.books.count).to eq 1
       end
 
       it 'removes books from hand' do

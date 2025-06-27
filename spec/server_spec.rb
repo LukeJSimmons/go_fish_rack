@@ -155,6 +155,15 @@ RSpec.describe Server do
           session1.click_on 'Request'
           expect(session1).to have_content("You made a book of Ks")
         end
+
+        it 'displays book in books' do
+          session_player = Server.game.current_player
+          session1.click_on 'Request'
+          session_player.books.each do |book|
+            expect(session1).to have_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
+            expect(session2).to have_no_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
+          end
+        end
       end
 
       context 'when current_player scores multiple books' do
@@ -166,6 +175,15 @@ RSpec.describe Server do
           session1.click_on 'Request'
           expect(session1).to have_content("You made a book of Ks")
           expect(session1).to have_content("You made a book of As")
+        end
+
+        it 'displays books in books' do
+          session_player = Server.game.current_player
+          session1.click_on 'Request'
+          session_player.books.each do |book|
+            expect(session1).to have_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
+            expect(session2).to have_no_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
+          end
         end
       end
     end

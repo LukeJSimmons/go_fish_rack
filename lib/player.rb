@@ -17,7 +17,7 @@ class Player
   def score_books_if_possible
     books = hand.group_by(&:rank).values.select { |cards| cards.count == 4 }
     books.flatten.each { |card| hand.delete(card) if books.flatten.include? card } if books
-    self.books << books if books
+    self.books += books if books
     books
   end
 end

@@ -66,4 +66,5 @@
     .panel__content
       .books
         .cards.cards--books
-          img.cards__card src="/images/cards/2C.svg"
+           - current_player.books.each do |book|
+            img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
