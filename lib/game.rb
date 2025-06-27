@@ -37,9 +37,9 @@ class Game
 
     drawn_card = fish_card(request) if matching_cards.empty?
 
-    current_player.score_books_if_possible unless ignore_books
+    scored_books = current_player.score_books_if_possible unless ignore_books
 
-    self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:))
+    self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:))
 
     advance_round if drawn_card && drawn_card.rank != request
 

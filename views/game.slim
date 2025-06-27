@@ -31,6 +31,11 @@
                 i.icon.ph.ph-arrow-elbow-down-right
                 .feed__bubble.feed__bubble--game-response
                   span = round_result.game_response(current_player)
+            - round_result.scored_books.each do |book|
+              .feed__response
+                i.icon.ph.ph-arrow-elbow-down-right
+                .feed__bubble.feed__bubble--book-response
+                  span = "You made a book of #{book.first.rank}s"
         form.feed__request-form  action="/game" method="post"
           .form-group
             label.form-label for="target" Player

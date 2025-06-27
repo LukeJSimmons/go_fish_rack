@@ -1,12 +1,13 @@
 class RoundResult
-  attr_reader :target, :request, :current_player, :matching_cards, :drawn_card
+  attr_reader :target, :request, :current_player, :matching_cards, :drawn_card, :scored_books
 
-  def initialize(target:, request:, current_player:, matching_cards:, drawn_card:)
+  def initialize(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:)
     @target = target
     @request = request
     @current_player = current_player
     @matching_cards = matching_cards
     @drawn_card = drawn_card
+    @scored_books = scored_books
   end
 
   def player_action(recipient)

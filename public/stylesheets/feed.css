@@ -46,6 +46,12 @@
         color: var(--op-color-primary-on-plus-max);
         box-shadow: var(--op-border-all) var(--op-color-primary-plus-seven);
       }
+
+      &.feed__bubble--book-response {
+        background-color: var(--op-color-alerts-notice-plus-seven);
+        color: var(--op-color-alerts-notice-on-plus-seven-alt);
+        box-shadow: var(--op-border-all) var(--op-color-alerts-notice-plus-five);
+      }
     }
   }
 

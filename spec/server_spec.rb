@@ -145,6 +145,29 @@ RSpec.describe Server do
           expect(session1).to have_no_css(".feed__bubble--game-response")
         end
       end
+
+      context 'when current_player scores a book' do
+        before do
+          session1.select 'K', from: 'Request'
+        end
+
+        it 'displays book message' do
+          session1.click_on 'Request'
+          expect(session1).to have_content("You made a book of Ks")
+        end
+      end
+
+      context 'when current_player scores multiple books' do
+        before do
+          session1.select 'K', from: 'Request'
+        end
+
+        it 'displays book message' do
+          session1.click_on 'Request'
+          expect(session1).to have_content("You made a book of Ks")
+          expect(session1).to have_content("You made a book of As")
+        end
+      end
     end
 
     describe 'feed__request-form' do

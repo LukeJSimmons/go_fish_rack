@@ -10,7 +10,8 @@ RSpec.describe RoundResult do
   let(:current_player) { Player.new('Player 1') }
   let(:matching_cards) { ['A','A'] }
   let(:drawn_card) { nil }
-  let(:result) { RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:) }
+  let(:scored_books) { [] }
+  let(:result) { RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:) }
 
   describe '#player_action' do
     context 'when displaying to current_player' do
