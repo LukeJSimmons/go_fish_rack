@@ -25,6 +25,10 @@ class RoundResult
     "#{subject(recipient)} drew a card"
   end
 
+  def book_message(book, recipient)
+    "#{subject(recipient)} made a book of #{book.first.rank}s"
+  end
+
   private
 
   def subject(recipient)

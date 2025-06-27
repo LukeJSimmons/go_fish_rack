@@ -35,7 +35,7 @@
               .feed__response
                 i.icon.ph.ph-arrow-elbow-down-right
                 .feed__bubble.feed__bubble--book-response
-                  span = "You made a book of #{book.first.rank}s"
+                  span = round_result.book_message(book, current_player)
         form.feed__request-form  action="/game" method="post"
           .form-group
             label.form-label for="target" Player

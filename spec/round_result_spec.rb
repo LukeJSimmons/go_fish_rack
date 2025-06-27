@@ -105,4 +105,24 @@ RSpec.describe RoundResult do
       end
     end
   end
+
+  describe '#book_message' do
+    let(:book) { [Card.new('K','H'),Card.new('K','D'),Card.new('K','C'),Card.new('K','S')] }
+
+    it 'displays scored book' do
+      expect(result.book_message(book, result.current_player)). to include book.first.rank
+    end
+
+    context 'when displaying to current_player' do
+      it 'displays scored book' do
+        expect(result.book_message(book, result.current_player)). to eq "You made a book of #{book.first.rank}s"
+      end
+    end
+
+    context 'when displaying to opponent' do
+      it 'displays scored book' do
+        expect(result.book_message(book, result.target)). to eq "Player 1 made a book of #{book.first.rank}s"
+      end
+    end
+  end
 end

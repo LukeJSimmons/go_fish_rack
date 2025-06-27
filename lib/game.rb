@@ -36,7 +36,7 @@ class Game
 
     drawn_card = fish_card(request) if matching_cards.empty?
 
-    scored_books = current_player.score_books_if_possible unless ignore_books
+    scored_books = ignore_books ? [] : current_player.score_books_if_possible
 
     drawn_card = current_player.add_card_to_hand(deck.draw_card) if current_player.hand.empty?
 
