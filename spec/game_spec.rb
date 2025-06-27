@@ -102,6 +102,17 @@ RSpec.describe Game do
           }.to_not change(game, :round)
         end
 
+        context 'when taken cards leave targets hand empty' do
+          let(:target) {
+            game.players.last.hand.clear
+            game.players.last
+           }
+
+          it 'adds a card from the deck to the players hand' do
+            expect(round.target.hand.count).to eq 1
+          end
+        end
+
         context 'when matching_cards makes a book' do
           before do
             game.ignore_books = false
@@ -114,6 +125,12 @@ RSpec.describe Game do
           context 'when hand is empty after scoring book' do
             it 'adds a card from the deck to the players hand' do
               expect(round.current_player.hand.count).to eq 1
+            end
+
+            it 'does not increment round' do
+              expect {
+                game.play_round(target, request)
+              }.to_not change(game, :round)
             end
           end
         end

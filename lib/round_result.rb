@@ -1,12 +1,12 @@
 class RoundResult
-  attr_reader :target, :request, :current_player, :matching_cards, :drawn_card, :scored_books
+  attr_reader :target, :request, :current_player, :matching_cards, :drawn_cards, :scored_books
 
-  def initialize(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:)
+  def initialize(target:, request:, current_player:, matching_cards:, drawn_cards:, scored_books:)
     @target = target
     @request = request
     @current_player = current_player
     @matching_cards = matching_cards
-    @drawn_card = drawn_card
+    @drawn_cards = drawn_cards
     @scored_books = scored_books
   end
 
@@ -20,9 +20,11 @@ class RoundResult
   end
 
   def game_response(recipient)
-    return unless drawn_card
-    return "You drew a #{drawn_card.rank}" if recipient == current_player
-    "#{subject(recipient)} drew a card"
+    return if drawn_cards.empty?
+    drawn_cards.each do |drawn_card|
+      return "You drew a #{drawn_card.rank}" if recipient == current_player
+      return "#{subject(recipient)} drew a card"
+    end
   end
 
   def book_message(book, recipient)

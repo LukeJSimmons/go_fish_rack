@@ -26,7 +26,7 @@
               i.icon.ph.ph-arrow-elbow-down-right
               .feed__bubble.feed__bubble--player-response
                 span = round_result.player_response(current_player)
-            - if round_result.drawn_card
+            - unless round_result.drawn_cards.empty?
               .feed__response
                 i.icon.ph.ph-arrow-elbow-down-right
                 .feed__bubble.feed__bubble--game-response

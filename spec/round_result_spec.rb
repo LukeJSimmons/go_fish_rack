@@ -9,9 +9,9 @@ RSpec.describe RoundResult do
   let(:request) { 'A' }
   let(:current_player) { Player.new('Player 1') }
   let(:matching_cards) { ['A','A'] }
-  let(:drawn_card) { nil }
+  let(:drawn_cards) { [] }
   let(:scored_books) { [] }
-  let(:result) { RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:) }
+  let(:result) { RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_cards:, scored_books:) }
 
   describe '#player_action' do
     context 'when displaying to current_player' do
@@ -90,17 +90,17 @@ RSpec.describe RoundResult do
     end
 
     context 'when target does not have request' do
-      let(:drawn_card) { Card.new('A','H') }
+      let(:drawn_cards) { [Card.new('A','H')] }
 
       context 'when displaying to current_player' do
         it 'returns drawn card' do
-          expect(result.game_response(result.current_player)).to include drawn_card.rank
+          expect(result.game_response(result.current_player)).to include drawn_cards.first.rank
         end
       end
 
       context 'when displaying to opponents' do
         it 'does not return drawn card' do
-          expect(result.game_response(result.target)).to_not include drawn_card.rank
+          expect(result.game_response(result.target)).to_not include drawn_cards.first.rank
         end
       end
     end

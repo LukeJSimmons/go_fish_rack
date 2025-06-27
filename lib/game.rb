@@ -34,15 +34,15 @@ class Game
   def play_round(target, request)
     matching_cards = take_cards_from_player(get_matching_cards(target, request), target)
 
-    drawn_card = fish_card(request) if matching_cards.empty?
+    drawn_cards = matching_cards.empty? ? [fish_card(request)] : []
 
     scored_books = ignore_books ? [] : current_player.score_books_if_possible
 
-    drawn_card = current_player.add_card_to_hand(deck.draw_card) if current_player.hand.empty?
+    players.each { |player| drawn_cards.push(player.add_card_to_hand(deck.draw_card)) if player.hand.empty? }
 
-    self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:))
+    self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_cards:, scored_books:))
 
-    advance_round if drawn_card && drawn_card.rank != request
+    advance_round if !drawn_cards.empty? && drawn_cards.first.rank != request && current_player.hand.count > 1
 
     round_results.last
   end
