@@ -110,6 +110,12 @@ RSpec.describe Game do
           it 'removes book from hand' do
             expect(round.current_player.hand.map(&:rank)).to_not include "K"
           end
+
+          context 'when hand is empty after scoring book' do
+            it 'adds a card from the deck to the players hand' do
+              expect(round.current_player.hand.count).to eq 1
+            end
+          end
         end
       end
 

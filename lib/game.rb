@@ -32,12 +32,13 @@ class Game
   end
 
   def play_round(target, request)
-    matching_cards = get_matching_cards(target, request)
-    take_cards_from_player(matching_cards, target)
+    matching_cards = take_cards_from_player(get_matching_cards(target, request), target)
 
     drawn_card = fish_card(request) if matching_cards.empty?
 
     scored_books = current_player.score_books_if_possible unless ignore_books
+
+    drawn_card = current_player.add_card_to_hand(deck.draw_card) if current_player.hand.empty?
 
     self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_card:, scored_books:))
 
@@ -63,6 +64,7 @@ class Game
   def take_cards_from_player(cards, player)
     player.hand -= cards
     current_player.hand += cards
+    cards
   end
 
   def get_matching_cards(target, request)
