@@ -35,11 +35,11 @@ class Game
   def play_round(target, request)
     matching_cards = take_cards_from_player(get_matching_cards(target, request), target)
 
-    drawn_cards = matching_cards.empty? ? [fish_card(request)] : []
+    drawn_cards = matching_cards.empty? && !deck.empty? ? [fish_card(request)] : []
 
     scored_books = ignore_books ? [] : current_player.score_books_if_possible
 
-    players.each { |player| drawn_cards.push(player.add_card_to_hand(deck.draw_card)) if player.hand.empty? }
+    players.each { |player| drawn_cards.push(player.add_card_to_hand(deck.draw_card)) if player.hand.empty? } unless deck.empty?
 
     self.round_results.push(RoundResult.new(target:, request:, current_player:, matching_cards:, drawn_cards:, scored_books:))
 

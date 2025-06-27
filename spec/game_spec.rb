@@ -132,6 +132,16 @@ RSpec.describe Game do
                 game.play_round(target, request)
               }.to_not change(game, :round)
             end
+
+            context 'when deck is empty' do
+              before do
+                game.deck.cards.clear
+              end
+
+              it 'does not draw a card' do
+                expect(game.play_round(target, request).drawn_cards).to eq []
+              end
+            end
           end
         end
       end
@@ -169,6 +179,16 @@ RSpec.describe Game do
             expect {
               game.play_round(target, request)
           }.to change(game, :round).by 1
+          end
+        end
+
+        context 'when deck is empty' do
+          before do
+            game.deck.cards.clear
+          end
+
+          it 'does not draw a card' do
+            expect(game.play_round(target, request).drawn_cards).to eq []
           end
         end
       end

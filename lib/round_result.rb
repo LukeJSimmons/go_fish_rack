@@ -20,6 +20,7 @@ class RoundResult
   end
 
   def game_response(recipient)
+    return "The deck is empty" if drawn_cards.empty? && matching_cards.empty?
     return if drawn_cards.empty?
     drawn_cards.each do |drawn_card|
       return "You drew a #{drawn_card.rank}" if recipient == current_player

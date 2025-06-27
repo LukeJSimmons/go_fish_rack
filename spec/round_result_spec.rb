@@ -103,6 +103,15 @@ RSpec.describe RoundResult do
           expect(result.game_response(result.target)).to_not include drawn_cards.first.rank
         end
       end
+
+      context 'when deck is empty' do
+        let(:drawn_cards) { [] }
+        let(:matching_cards) { [] }
+
+        it 'returns message saying the deck is empty' do
+          expect(result.game_response(result.current_player)).to match (/the deck is empty/i)
+        end
+      end
     end
   end
 

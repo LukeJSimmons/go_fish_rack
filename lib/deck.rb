@@ -19,6 +19,14 @@ class Deck
     cards.count
   end
 
+  def empty?
+    cards.empty?
+  end
+
+  def clear
+    cards.clear
+  end
+
   private
 
   def build_cards

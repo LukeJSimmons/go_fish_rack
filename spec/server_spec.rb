@@ -128,6 +128,17 @@ RSpec.describe Server do
           session2.driver.refresh
           expect(session2).to have_content("Player 1 drew a card")
         end
+
+        context 'when deck is empty' do
+          before do
+            Server.game.deck.clear
+          end
+
+          it 'displays that the deck is empty' do
+            session1.click_on 'Request'
+            expect(session1).to have_content("The deck is empty")
+          end
+        end
       end
 
       context 'when target has request' do

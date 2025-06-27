@@ -19,14 +19,14 @@
     .panel__content
       .feed
         .feed__actions
-          - game.round_results.each do |round_result|
+          - game.round_results.reverse.each do |round_result|
             .feed__bubble.feed__bubble--player-action
               span = round_result.player_action(current_player)
             .feed__response
               i.icon.ph.ph-arrow-elbow-down-right
               .feed__bubble.feed__bubble--player-response
                 span = round_result.player_response(current_player)
-            - unless round_result.drawn_cards.empty?
+            - if game.deck.empty? || !round_result.drawn_cards.empty?
               .feed__response
                 i.icon.ph.ph-arrow-elbow-down-right
                 .feed__bubble.feed__bubble--game-response
