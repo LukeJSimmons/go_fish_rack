@@ -27,6 +27,14 @@ class Deck
     cards.clear
   end
 
+  def shuffle!
+    cards.shuffle!
+  end
+
+  def ==(other_deck)
+    cards == other_deck.cards
+  end
+
   private
 
   def build_cards

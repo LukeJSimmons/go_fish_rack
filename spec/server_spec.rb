@@ -60,6 +60,7 @@ RSpec.describe Server do
         session.fill_in :name, with: player_name
         session.click_on 'Join'
       end
+      Server.game.ignore_shuffle = true
       session2.click_on 'Start Game'
       session1.driver.refresh
       session1.click_on 'Start Game'

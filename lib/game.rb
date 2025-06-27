@@ -2,7 +2,7 @@ require_relative 'deck'
 require_relative 'round_result'
 
 class Game
-  attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results, :ignore_books
+  attr_accessor :players, :deck, :players_needed_to_start, :round, :round_results, :ignore_books, :ignore_shuffle
 
   BASE_DECK_SIZE = 52
   BASE_HAND_SIZE = 7
@@ -25,6 +25,7 @@ class Game
   end
 
   def start
+    deck.shuffle! unless ignore_shuffle
     deal_cards
   end
 

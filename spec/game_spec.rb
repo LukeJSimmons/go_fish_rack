@@ -49,6 +49,12 @@ RSpec.describe Game do
           game.start
       }.to change(game.deck.cards, :count).by (-14)
       end
+
+      it 'shuffles the deck' do
+        expect(game.deck).to eq Deck.new
+        game.start
+        expect(game.deck).to_not eq Deck.new
+      end
     end
 
     describe '#current_player' do
@@ -69,6 +75,10 @@ RSpec.describe Game do
     describe '#play_round' do
       let(:target) { game.players.last }
       let(:request) { 'K' }
+
+      before do
+        game.ignore_shuffle = true
+      end
 
       it 'returns a RoundResult object' do
         round_result = game.play_round(target, request)
