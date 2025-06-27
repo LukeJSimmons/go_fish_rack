@@ -271,5 +271,57 @@ RSpec.describe Server do
         end
       end
     end
+
+    context 'when client has opponent API key' do
+      before do
+        post '/join', { 'name' => 'Caleb' }.to_json, {
+          'Accept' => 'application/json',
+          'CONTENT_TYPE' => 'application/json'
+        }
+
+        post '/join', { 'name' => 'Joe' }.to_json, {
+          'Accept' => 'application/json',
+          'CONTENT_TYPE' => 'application/json'
+        }
+      end
+
+      context 'GET /game' do
+        it 'returns 401 error' do
+          api_key = Server.game.players.first.api_key
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+
+      context 'GET /lobby' do
+        it 'returns 401 error' do
+          api_key = Server.game.players.first.api_key
+          get '/lobby', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'target' => 'Player 2',
+            'request' => 'A',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+
+      context 'POST /game' do
+        it 'returns 401 error' do
+          api_key = Server.game.players.first.api_key
+          post '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response.status).to eq 401
+        end
+      end
+    end
   end
 end

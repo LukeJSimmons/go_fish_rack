@@ -41,7 +41,6 @@ class Server < Sinatra::Base
 
   get '/lobby' do
     error 401 unless is_valid_player?(session[:current_player])
-    # redirect '/' if self.class.game.empty? || !session[:current_player]
 
     respond_to do |format|
       format.json {  }
@@ -51,7 +50,6 @@ class Server < Sinatra::Base
 
   get '/game' do
     error 401 unless is_valid_player?(session[:current_player])
-    # redirect '/' if self.class.game.empty?
 
     self.class.game.start unless self.class.game.started?
 
