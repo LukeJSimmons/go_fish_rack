@@ -1,11 +1,12 @@
 class Player
-  attr_reader :name
-  attr_accessor :api_key, :hand, :books
+  attr_reader :name, :api_key
+  attr_accessor :hand, :books
 
-  def initialize(name)
+  def initialize(name, api_key=nil)
     @name = name
     @hand = []
     @books = []
+    @api_key = api_key
   end
 
   def add_card_to_hand(card)

@@ -222,6 +222,10 @@ RSpec.describe Server do
           'Accept' => 'application/json',
           'CONTENT_TYPE' => 'application/json'
         }
+        post '/join', { 'name' => 'Joe' }.to_json, {
+          'Accept' => 'application/json',
+          'CONTENT_TYPE' => 'application/json'
+        }
       end
 
       it 'returns game status via API' do

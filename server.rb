@@ -25,12 +25,9 @@ class Server < Sinatra::Base
   end
 
   post '/join' do
-    player = Player.new(params['name'])
-    player.api_key = Base64.urlsafe_encode64(player.name)
-    session[:current_player] = player
+    player = Player.new(params['name'], Base64.urlsafe_encode64(params['name']))
+    session[:current_player] = self.class.game.add_player(player)
     session[:api_key] = player.api_key
-    self.class.game.add_player(player)
-
     self.class.api_keys[player.api_key] = player
 
     respond_to do |format|
@@ -50,15 +47,13 @@ class Server < Sinatra::Base
 
   get '/game' do
     error 401 unless is_valid_player?(session[:current_player])
+    redirect '/lobby' unless self.class.game.players.count == self.class.game.players_needed_to_start
 
     self.class.game.start unless self.class.game.started?
 
     respond_to do |format|
       format.json { json players: self.class.game.players, current_player: session[:current_player] }
-      format.html do
-        redirect '/lobby' unless self.class.game.players.count == self.class.game.players_needed_to_start
-        slim :game, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } }
-      end
+      format.html { slim :game, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
     end
   end
 
