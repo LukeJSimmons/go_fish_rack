@@ -219,4 +219,57 @@ RSpec.describe Game do
       end
     end
   end
+
+  describe '#winner' do
+    before do
+      game.add_player(player1)
+      game.add_player(player2)
+    end
+
+    context 'when player 1 has the most books' do
+      before do
+        player1.books = [[Card.new('A','H')],[Card.new('K','H')]]
+        player2.books = [[Card.new('Q','H')]]
+      end
+
+      it 'returns player 1' do
+        expect(game.winner).to eq player1
+      end
+    end
+
+    context 'when player 2 has the most books' do
+      before do
+        player2.books = [[Card.new('A','H')],[Card.new('K','H')]]
+        player1.books = [[Card.new('Q','H')]]
+      end
+
+      it 'returns player 2' do
+        expect(game.winner).to eq player2
+      end
+    end
+
+    context 'when players are tied for amount of books' do
+      context 'when player 1 has highest rank book' do
+        before do
+          player1.books = [[Card.new('A','H')],[Card.new('K','H')]]
+          player2.books = [[Card.new('Q','H')],[Card.new('J','H')]]
+        end
+
+        it 'returns player with highest rank book' do
+          expect(game.winner).to eq player1
+        end
+      end
+
+      context 'when player 1 has highest rank book' do
+        before do
+          player2.books = [[Card.new('A','H')],[Card.new('K','H')]]
+          player1.books = [[Card.new('Q','H')],[Card.new('J','H')]]
+        end
+
+        it 'returns player with highest rank book' do
+          expect(game.winner).to eq player2
+        end
+      end
+    end
+  end
 end

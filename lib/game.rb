@@ -49,6 +49,11 @@ class Game
     round_results.last
   end
 
+  def winner
+    return player_with_most_books unless tie
+    player_with_highest_rank_book
+  end
+
   def started?
     deck.count < BASE_DECK_SIZE
   end
@@ -60,6 +65,7 @@ class Game
   def current_player
     players[round%players.count] unless players.count == 0
   end
+
 
   private
 
@@ -81,5 +87,21 @@ class Game
     players.each do |player|
       BASE_HAND_SIZE.times { player.add_card_to_hand(deck.draw_card) }
     end
+  end
+
+  def player_with_most_books
+    total_books = players.map(&:books).map(&:count)
+    players[total_books.find_index(total_books.max)]
+  end
+
+  def tie
+    players.all? { |player| player.books.count == players.first.books.count }
+  end
+
+  def player_with_highest_rank_book
+    player_highest_books = players.map do |player|
+      player.books.map { |book| book.first.value }.max
+    end
+    players[player_highest_books.find_index(player_highest_books.max)]
   end
 end
