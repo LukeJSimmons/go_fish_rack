@@ -6,12 +6,26 @@
     .panel__content
       .player-decks
         span Players
-        ul
-          - game.players.each do |player|
-            li.players__player
-              = player.name
-              - if player.name == current_player.name
-                = " (you)"
+        - game.players.each do |player|
+          - unless player.name == current_player.name
+            details.accordion.accordion--within-player-decks
+              summary
+                i.accordion__marker.icon.icon--small.ph.ph-caret-right
+                span.accordion__label = player.name
+                .accordion__row.accordion__row--with-gap
+                  .accordion__row
+                    span.accordion__label Cards:
+                    span.accordion__label.bold = player.hand.count
+                  .accordion__row
+                    span.accordion__label Books:
+                    span.accordion__label.bold = player.books.count
+              .accordion__row
+                .cards
+                  - player.hand.each do |card|
+                    img.cards__card src="/images/cards/2B.svg"
+                .cards
+                  - player.books.each do |book|
+                    img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
   .panel.panel--feed.panel--highlight
     .panel__header
       span Game Feed

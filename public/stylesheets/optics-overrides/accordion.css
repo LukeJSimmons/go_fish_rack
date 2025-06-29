@@ -1,0 +1,75 @@
+.accordion.accordion--within-player-decks {
+  background-color: var(--op-color-neutral-plus-eight);
+  box-shadow: var(--op-border-all) var(--op-color-primary-plus-four);
+  border-radius: var(--op-radius-medium);
+
+  summary {
+    padding: var(--op-space-x-small);
+    padding-right: var(--op-space-large);
+    box-shadow: var(--op-border-all) var(--op-color-primary-plus-four);
+
+    background-color: var(--op-color-primary-plus-max);
+    color: var(--op-color-primary-on-plus-max);
+
+    .accordion__label {
+      padding-left: var(--op-space-2x-small);
+      font-size: var(--op-font-small);
+      font-weight: var(--op-font-weight-normal);
+
+      &.bold {
+        padding-left: var(--op-space-2x-small);
+        font-weight: var(--op-font-weight-bold);
+      }
+    }
+
+    .accordion__marker {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: var(--op-input-height-small);
+      height: var(--op-input-height-small);
+      border-radius: var(--op-radius-circle);
+      padding: var(--op-space-2x-small);
+      transition: 0.1s;
+
+      &:hover {
+        box-shadow: var(--op-border-all) var(--op-color-primary-plus-three);
+      }
+    }
+  }
+
+  .accordion__row {
+    display: flex;
+    justify-content: space-between;
+
+    &.accordion__row--with-gap {
+      gap: var(--op-space-x-large);
+    }
+
+    .cards {
+      --gf-card-height: 14rem;
+      --gf-card-overlap: -7rem;
+    }
+  }
+
+  &[open] {
+    summary {
+      background-color: var(--op-color-primary-plus-eight);
+      color: var(--op-color-primary-on-plus-eight);
+    }
+
+    .accordion__marker {
+      background-color: var(--op-color-primary-plus-five);
+      color: var(--op-color-primary-on-plus-five);
+      box-shadow: var(--op-border-all) var(--op-color-primary-plus-three);
+    }
+
+    .accordion__label {
+      color: var(--op-color-primary-on-plus-eight);
+    }
+
+    .accordion__row .accordion__label {
+      color: var(--op-color-primary-on-plus-eight-alt);
+    }
+  }
+}

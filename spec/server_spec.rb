@@ -66,9 +66,55 @@ RSpec.describe Server do
       session1.click_on 'Start Game'
     end
 
-    it 'displays current player name' do
-      expect(session2).to have_content('Player 2 (you)')
-      expect(session1).to have_content('Player 1 (you)')
+    describe 'player decks' do
+      let(:opponent) { Server.game.players.first }
+
+      it 'does not display current player name' do
+        expect(session2).to have_no_css('.accordion__label', text: 'Player 2')
+        expect(session1).to have_no_css('.accordion__label', text: 'Player 1')
+      end
+
+      it 'displays opposing players names' do
+        expect(session2).to have_css('.accordion__label', text: 'Player 1')
+        expect(session1).to have_css('.accordion__label', text: 'Player 2')
+      end
+
+      it 'displays opposing players hands' do
+        session2.within '.accordion' do
+          session2.find('span', text: 'Player 1').click
+          opponent.hand.each do |card|
+            expect(session2).to have_css("img[src*='/images/cards/2B.svg']")
+          end
+        end
+      end
+
+      it 'displays opposing player hand count' do
+        session2.within '.accordion' do
+          session2.find('span', text: 'Player 1').click
+          expect(session2).to have_css(".accordion__label", text: opponent.hand.count)
+        end
+      end
+
+      it 'displays opposing player books count' do
+        session2.within '.accordion' do
+          session2.find('span', text: 'Player 1').click
+          expect(session2).to have_css(".accordion__label", text: opponent.books.count)
+        end
+      end
+
+      context 'when player has books' do
+        before do
+          Server.game.players.first.books = [[Card.new('A','H')]]
+          session2.driver.refresh
+        end
+
+        it 'displays opposing player books count' do
+          session2.within '.accordion' do
+            session2.find('span', text: 'Player 1').click
+            expect(session2).to have_css(".accordion__label", text: opponent.books.count)
+          end
+        end
+      end
     end
 
      it 'allows multiple players to join game' do
@@ -179,6 +225,17 @@ RSpec.describe Server do
           session_player.books.each do |book|
             expect(session1).to have_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
             expect(session2).to have_no_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
+          end
+        end
+
+        it 'displays books in accordion to oppoenent' do
+          session1.click_on 'Request'
+          session2.driver.refresh
+          session2.within '.accordion' do
+            session2.find('span', text: 'Player 1').click
+          end
+          Server.game.players.first.books.each do |book|
+            expect(session2).to have_css("img[src*='/images/cards/#{book.first.rank}#{book.first.suit}.svg']")
           end
         end
       end

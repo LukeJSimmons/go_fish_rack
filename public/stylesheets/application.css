@@ -1,5 +1,6 @@
 /* Optics Overrides */
 @import './optics-overrides/card.css';
+@import './optics-overrides/accordion.css';
 
 /* Component Styles */
 @import './join-form.css';
