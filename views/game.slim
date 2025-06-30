@@ -6,7 +6,6 @@
     .panel.panel--player-decks
       .panel__header
         span Game
-        span = "#{game.current_player.name}'s turn"
       .panel__content
         .player-decks
           span Players
@@ -33,7 +32,7 @@
     .panel.panel--feed.panel--highlight
       .panel__header
         span Game Feed
-        span = "Round: #{game.round+1}"
+        span.badge.badge--primary = "#{game.current_player.name}'s turn"
       .panel__content
         .feed
           .feed__actions
