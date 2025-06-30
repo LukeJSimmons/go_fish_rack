@@ -21,5 +21,12 @@
   .cards__card {
     height: var(--gf-card-height);
     box-shadow: var(--op-shadow-medium);
+    position: relative;
+    bottom: 0;
+    transition: 0.1s;
+
+    &:hover {
+      bottom: var(--op-space-medium);
+    }
   }
 }
