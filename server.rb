@@ -43,7 +43,7 @@ class Server < Sinatra::Base
     self.class.game.start if self.class.game.players_needed == 0 && !self.class.game.started?
 
     respond_to do |format|
-      format.json { json players: self.class.game.players, current_player: session[:current_player] }
+      format.json { game_state }
       format.html { slim :game, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
     end
   end
@@ -76,5 +76,11 @@ class Server < Sinatra::Base
 
   def get_player_by_name(name)
     self.class.game.players.find { |player| player.name == name }
+  end
+
+  def game_state
+    return json players: self.class.game.players, players_needed: self.class.game.players_needed unless self.class.game.started?
+    return json players: self.class.game.players, hand: session[:current_player].hand, round_result: self.class.game.round_results.last unless self.class.game.game_over?
+    json winner: self.class.game.winner
   end
 end

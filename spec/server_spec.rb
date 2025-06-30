@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require_relative 'spec_helper'
 
 require 'rack/test'
 require 'rspec'
@@ -308,28 +308,78 @@ RSpec.describe Server do
     end
   end
 
-  describe 'API key authorization' do
+  fdescribe 'API key authorization' do
     context 'when client has API key' do
-      before do
-        post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
-          'Accept' => 'application/json',
-          'CONTENT_TYPE' => 'application/json'
-        }
-        post '/join', { 'name' => 'Joe' }.to_json, {
-          'Accept' => 'application/json',
-          'CONTENT_TYPE' => 'application/json'
-        }
+      context 'lobby' do
+        before do
+          post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+        end
+
+        it 'returns game status via API' do
+          api_key = JSON.parse(last_response.body)['api_key']
+          expect(api_key).not_to be_nil
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(JSON.parse(last_response.body).keys).to include 'players'
+          expect(JSON.parse(last_response.body).keys).to include 'players_needed'
+        end
       end
 
-      it 'returns game status via API' do
-        api_key = JSON.parse(last_response.body)['api_key']
-        expect(api_key).not_to be_nil
-        get '/game', nil, {
-          'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
-          'Accept' => 'application/json',
-          'CONTENT_TYPE' => 'application/json'
-        }
-        expect(JSON.parse(last_response.body).keys).to include 'players'
+      context 'game' do
+        before do
+          post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          post '/join', { 'name' => 'Joe' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+        end
+
+        it 'returns game status via API' do
+          api_key = JSON.parse(last_response.body)['api_key']
+          expect(api_key).not_to be_nil
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(JSON.parse(last_response.body).keys).to include 'hand'
+          expect(JSON.parse(last_response.body).keys).to include 'players'
+          expect(JSON.parse(last_response.body).keys).to include 'round_result'
+        end
+      end
+
+      context 'game over' do
+        before do
+          post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          post '/join', { 'name' => 'Joe' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          allow(Server.game).to receive(:game_over?).and_return true
+        end
+
+        it 'returns game status via API' do
+          api_key = JSON.parse(last_response.body)['api_key']
+          expect(api_key).not_to be_nil
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(JSON.parse(last_response.body).keys).to include 'winner'
+        end
       end
     end
 
@@ -349,9 +399,9 @@ RSpec.describe Server do
           post '/game', nil, {
             'HTTP_AUTHORIZATION' => "invalid",
             'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json',
             'target' => 'Player 2',
-            'request' => 'A',
-            'CONTENT_TYPE' => 'application/json'
+            'request' => 'A'
           }
           expect(last_response.status).to eq 401
         end

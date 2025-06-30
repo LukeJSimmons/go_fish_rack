@@ -1,0 +1,26 @@
+{
+  "id": "file:/game.json#",
+  "type": "object",
+  "required": [
+    "round_results",
+    "players",
+    "hand"
+  ],
+  "properties": {
+    "round_results": {
+      "type": "object"
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/player.json#"
+      }
+    },
+    "hand": {
+      "type": "array",
+      "items": {
+        "$ref": "file:/card.json#"
+      }
+    }
+  }
+}
