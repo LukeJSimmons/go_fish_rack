@@ -61,9 +61,8 @@ RSpec.describe Server do
         session.click_on 'Join'
       end
       Server.game.ignore_shuffle = true
-      session2.click_on 'Start Game'
       session1.driver.refresh
-      session1.click_on 'Start Game'
+      session1.driver.refresh
     end
 
     describe 'player decks' do
@@ -151,6 +150,7 @@ RSpec.describe Server do
         session_player = Server.game.current_player
         session1.click_on 'Request'
         session2.driver.refresh
+        session2.driver.refresh
         session_player.hand.each do |card|
           expect(session1).to have_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
           expect(session2).to have_no_css("img[src*='/images/cards/#{card.rank}#{card.suit}.svg']")
@@ -191,6 +191,7 @@ RSpec.describe Server do
       context 'when target has request' do
         before do
           Server.game.ignore_books = true
+          Server.game.ignore_shuffle = true
           session1.select 'K', from: 'Request'
         end
 
@@ -274,7 +275,6 @@ RSpec.describe Server do
 
       it 'only contains valid rank requests' do
         expect(session2).to have_selector("option", :text=>"K")
-        # expect(session2).to have_select "request", options: ['K','Q','J']
       end
 
       it 'disables the request button when it is not your turn' do
@@ -320,17 +320,6 @@ RSpec.describe Server do
         end
       end
 
-      context 'GET /lobby' do
-        it 'returns 401 error' do
-          get '/lobby', nil, {
-            'HTTP_AUTHORIZATION' => "invalid",
-            'Accept' => 'application/json',
-            'CONTENT_TYPE' => 'application/json'
-          }
-          expect(last_response.status).to eq 401
-        end
-      end
-
       context 'POST /game' do
         it 'returns 401 error' do
           post '/game', nil, {
@@ -364,20 +353,6 @@ RSpec.describe Server do
           get '/game', nil, {
             'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
             'Accept' => 'application/json',
-            'CONTENT_TYPE' => 'application/json'
-          }
-          expect(last_response.status).to eq 401
-        end
-      end
-
-      context 'GET /lobby' do
-        it 'returns 401 error' do
-          api_key = Server.game.players.first.api_key
-          get '/lobby', nil, {
-            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
-            'Accept' => 'application/json',
-            'target' => 'Player 2',
-            'request' => 'A',
             'CONTENT_TYPE' => 'application/json'
           }
           expect(last_response.status).to eq 401

@@ -1,84 +1,106 @@
-.game-layout
-  .panel.panel--player-decks
-    .panel__header
-      span Game
-      span = "#{game.current_player.name}'s turn"
-    .panel__content
-      .player-decks
-        span Players
-        - game.players.each do |player|
-          - unless player.name == current_player.name
-            details.accordion.accordion--within-player-decks
-              summary
-                i.accordion__marker.icon.icon--small.ph.ph-caret-right
-                span.accordion__label = player.name
-                .accordion__row.accordion__row--with-gap
-                  .accordion__row
-                    span.accordion__label Cards:
-                    span.accordion__label.bold = player.hand.count
-                  .accordion__row
-                    span.accordion__label Books:
-                    span.accordion__label.bold = player.books.count
-              .accordion__row
-                .cards
-                  - player.hand.each do |card|
-                    img.cards__card src="/images/cards/2B.svg"
-                .cards
-                  - player.books.each do |book|
-                    img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
-  .panel.panel--feed.panel--highlight
-    .panel__header
-      span Game Feed
-      span = "Round: #{game.round+1}"
-    .panel__content
-      .feed
-        .feed__actions
-          - game.round_results.reverse.each do |round_result|
-            .feed__bubble.feed__bubble--player-action
-              span = round_result.player_action(current_player)
-            .feed__response
-              i.icon.ph.ph-arrow-elbow-down-right
-              .feed__bubble.feed__bubble--player-response
-                span = round_result.player_response(current_player)
-            - if game.deck.empty? || !round_result.drawn_cards.empty?
+- if game.started?
+  .game-layout
+    .panel.panel--player-decks
+      .panel__header
+        span Game
+        span = "#{game.current_player.name}'s turn"
+      .panel__content
+        .player-decks
+          span Players
+          - game.players.each do |player|
+            - unless player.name == current_player.name
+              details.accordion.accordion--within-player-decks
+                summary
+                  i.accordion__marker.icon.icon--small.ph.ph-caret-right
+                  span.accordion__label = player.name
+                  .accordion__row.accordion__row--with-gap
+                    .accordion__row
+                      span.accordion__label Cards:
+                      span.accordion__label.bold = player.hand.count
+                    .accordion__row
+                      span.accordion__label Books:
+                      span.accordion__label.bold = player.books.count
+                .accordion__row
+                  .cards
+                    - player.hand.each do |card|
+                      img.cards__card src="/images/cards/2B.svg"
+                  .cards
+                    - player.books.each do |book|
+                      img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
+    .panel.panel--feed.panel--highlight
+      .panel__header
+        span Game Feed
+        span = "Round: #{game.round+1}"
+      .panel__content
+        .feed
+          .feed__actions
+            - game.round_results.reverse.each do |round_result|
+              .feed__bubble.feed__bubble--player-action
+                span = round_result.player_action(current_player)
               .feed__response
                 i.icon.ph.ph-arrow-elbow-down-right
-                .feed__bubble.feed__bubble--game-response
-                  span = round_result.game_response(current_player)
-            - round_result.scored_books.each do |book|
-              .feed__response
-                i.icon.ph.ph-arrow-elbow-down-right
-                .feed__bubble.feed__bubble--book-response
-                  span = round_result.book_message(book, current_player)
-        form.feed__request-form  action="/game" method="post"
-          .form-group
-            label.form-label for="target" Player
-            select#target.form-control name="target"
-              - game.players.each do |player|
-                - unless player.name == current_player.name
-                  option = player.name
-          .form-group
-            label.form-label for="request" Request
-            select#request.form-control name="request"
-              - current_player.hand.map(&:rank).uniq.each do |rank|
-                  option = rank
-          - if game.current_player == current_player
-            button.btn.btn--primary.feed__submit type="submit" Request
-          - else
-            button.btn.btn--primary.feed__submit.btn--disabled type="submit" disabled="true" Request
-  .panel.panel--hand.panel--tray
-    .panel__header
-      span Your Hand
-    .panel__content
-      .hand
-        .cards
-          - current_player.hand.each do |card|
-            img.cards__card src="/images/cards/#{card.rank}#{card.suit}.svg"
-  .panel.panel--books.panel--tray
-    .panel__header
-      span Your Books
-    .panel__content
-      .books
-        .cards.cards--books
-           - current_player.books.each do |book|
-            img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
+                .feed__bubble.feed__bubble--player-response
+                  span = round_result.player_response(current_player)
+              - if game.deck.empty? || !round_result.drawn_cards.empty?
+                .feed__response
+                  i.icon.ph.ph-arrow-elbow-down-right
+                  .feed__bubble.feed__bubble--game-response
+                    span = round_result.game_response(current_player)
+              - round_result.scored_books.each do |book|
+                .feed__response
+                  i.icon.ph.ph-arrow-elbow-down-right
+                  .feed__bubble.feed__bubble--book-response
+                    span = round_result.book_message(book, current_player)
+          form.feed__request-form  action="/game" method="post"
+            .form-group
+              label.form-label for="target" Player
+              select#target.form-control name="target"
+                - game.players.each do |player|
+                  - unless player.name == current_player.name
+                    option = player.name
+            .form-group
+              label.form-label for="request" Request
+              select#request.form-control name="request"
+                - current_player.hand.map(&:rank).uniq.each do |rank|
+                    option = rank
+            - if game.current_player == current_player
+              button.btn.btn--primary.feed__submit type="submit" Request
+            - else
+              button.btn.btn--primary.feed__submit.btn--disabled type="submit" disabled="true" Request
+    .panel.panel--hand.panel--tray
+      .panel__header
+        span Your Hand
+      .panel__content
+        .hand
+          .cards
+            - current_player.hand.each do |card|
+              img.cards__card src="/images/cards/#{card.rank}#{card.suit}.svg"
+    .panel.panel--books.panel--tray
+      .panel__header
+        span Your Books
+      .panel__content
+        .books
+          .cards.cards--books
+            - current_player.books.each do |book|
+              img.cards__card src="/images/cards/#{book.first.rank}#{book.first.suit}.svg"
+- else
+  .lobby
+  .card.card--lobby
+    .card__header
+      span Lobby
+    .card__content
+      table.table.table--primary
+        thead
+          tr
+            th Players
+        tbody
+          - game.players.each do |player|
+            tr
+              td
+                = player.name
+                - if player.name == current_player.name
+                  = " (you)"
+          - game.players_needed.times do
+            tr
+              td Waiting for players...
+

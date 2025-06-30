@@ -32,24 +32,14 @@ class Server < Sinatra::Base
 
     respond_to do |format|
       format.json { json api_key: player.api_key }
-      format.html { redirect '/lobby' }
-    end
-  end
-
-  get '/lobby' do
-    error 401 unless is_valid_player?(session[:current_player])
-
-    respond_to do |format|
-      format.json {  }
-      format.html { slim :lobby, locals: { game: self.class.game, current_player: self.class.game.players.find { |player| player.name == session[:current_player].name } } }
+      format.html { redirect '/game' }
     end
   end
 
   get '/game' do
     error 401 unless is_valid_player?(session[:current_player])
-    redirect '/lobby' unless self.class.game.players.count == self.class.game.players_needed_to_start
 
-    self.class.game.start unless self.class.game.started?
+    self.class.game.start if self.class.game.players_needed == 0 && !self.class.game.started?
 
     respond_to do |format|
       format.json { json players: self.class.game.players, current_player: session[:current_player] }
