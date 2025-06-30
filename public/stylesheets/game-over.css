@@ -1,0 +1,10 @@
+.game-over {
+  display: flex;
+  justify-content: center;
+
+  padding-top: var(--op-space-3x-large);
+
+  .game-over__winner {
+    font-size: var(--op-font-x-large);
+  }
+}
