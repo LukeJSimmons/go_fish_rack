@@ -239,6 +239,7 @@ RSpec.describe Server do
 
       context 'when current_player scores multiple books' do
         before do
+          Server.game.ignore_books = false
           session1.select 'K', from: 'Request'
         end
 
@@ -308,7 +309,7 @@ RSpec.describe Server do
     end
   end
 
-  fdescribe 'API key authorization' do
+  describe 'API key authorization' do
     context 'when client has API key' do
       context 'lobby' do
         before do
@@ -322,7 +323,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_API_KEY' => api_key,
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
@@ -347,7 +348,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_API_KEY' => api_key,
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
@@ -374,7 +375,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_API_KEY' => api_key,
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
@@ -387,6 +388,7 @@ RSpec.describe Server do
       context 'GET /game' do
         it 'returns 401 error' do
           get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "invalid",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }

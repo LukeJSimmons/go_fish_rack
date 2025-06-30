@@ -12,5 +12,5 @@ group :test do
   gem 'rack-test'
   gem 'capybara'
   gem 'capybara-selenium'
-  gem 'json-matchers'
+  gem 'json_matchers'
 end

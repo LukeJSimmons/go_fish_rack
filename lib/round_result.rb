@@ -32,6 +32,17 @@ class RoundResult
     "#{subject(recipient)} made a book of #{book.first.rank}s"
   end
 
+  def attributes
+    {
+      current_player: current_player.attributes,
+      target: target.attributes,
+      request: request,
+      matching_cards: matching_cards.map(&:rank),
+      drawn_cards: drawn_cards.map(&:rank),
+      scored_books: scored_books
+    }
+  end
+
   private
 
   def subject(recipient)

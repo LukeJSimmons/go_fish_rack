@@ -21,4 +21,12 @@ class Player
     self.books += books if books
     books
   end
+
+  def attributes
+    {
+      name: name,
+      hand_count: hand.count,
+      books_count: books.count
+    }
+  end
 end

@@ -25,6 +25,7 @@ class Server < Sinatra::Base
   end
 
   post '/join' do
+    redirect '/' if self.class.game.players_needed == 0
     player = Player.new(params['name'], Base64.urlsafe_encode64(params['name']))
     self.class.game.players_needed_to_start = params["number_of_players"].to_i if self.class.game.players.empty?
     session[:current_player] = self.class.game.add_player(player)
@@ -65,7 +66,7 @@ class Server < Sinatra::Base
   end
 
   def api_key
-    return request.env['HTTP_HTTP_AUTHORIZATION'] if request.content_type == 'application/json'
+    return auth.username if request.content_type == 'application/json'
     session[:api_key]
   end
 
@@ -79,8 +80,8 @@ class Server < Sinatra::Base
   end
 
   def game_state
-    return json players: self.class.game.players, players_needed: self.class.game.players_needed unless self.class.game.started?
-    return json players: self.class.game.players, hand: player_by_api_key.hand, round_result: self.class.game.round_results.last unless self.class.game.game_over?
+    return json players: self.class.game.players.map(&:attributes), players_needed: self.class.game.players_needed unless self.class.game.started?
+    return json players: self.class.game.players.map(&:attributes), hand: player_by_api_key.hand.map(&:rank), round_result: self.class.game.round_results.last&.attributes unless self.class.game.game_over?
     json winner: self.class.game.winner
   end
 
