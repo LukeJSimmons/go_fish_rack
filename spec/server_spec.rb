@@ -327,8 +327,7 @@ RSpec.describe Server do
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
-          expect(JSON.parse(last_response.body).keys).to include 'players'
-          expect(JSON.parse(last_response.body).keys).to include 'players_needed'
+          expect(last_response).to match_json_schema('lobby')
         end
       end
 
@@ -352,9 +351,7 @@ RSpec.describe Server do
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
-          expect(JSON.parse(last_response.body).keys).to include 'hand'
-          expect(JSON.parse(last_response.body).keys).to include 'players'
-          expect(JSON.parse(last_response.body).keys).to include 'round_result'
+          expect(last_response).to match_json_schema('game')
         end
       end
 
@@ -379,7 +376,31 @@ RSpec.describe Server do
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
-          expect(JSON.parse(last_response.body).keys).to include 'winner'
+          expect(last_response).to match_json_schema('game_over')
+        end
+      end
+
+      context 'POST /game' do
+        before do
+          post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          post '/join', { 'name' => 'Joe' }.to_json, {
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+        end
+
+        it 'returns game status via API' do
+          api_key = JSON.parse(last_response.body)['api_key']
+          expect(api_key).not_to be_nil
+          post '/game', { 'target' => 'Caleb', 'request' => 'A' }.to_json, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          expect(last_response).to match_json_schema('round_result')
         end
       end
     end

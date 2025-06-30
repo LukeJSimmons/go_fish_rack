@@ -54,7 +54,7 @@ class Server < Sinatra::Base
     round_result = self.class.game.play_round(get_player_by_name(params[:target]), params[:request])
 
     respond_to do |format|
-      format.json { json round_result: round_result }
+      format.json { json round_result.attributes }
       format.html { redirect '/game' }
     end
   end
@@ -82,7 +82,7 @@ class Server < Sinatra::Base
   def game_state
     return json players: self.class.game.players.map(&:attributes), players_needed: self.class.game.players_needed unless self.class.game.started?
     return json players: self.class.game.players.map(&:attributes), hand: player_by_api_key.hand.map(&:rank), round_result: self.class.game.round_results.last&.attributes unless self.class.game.game_over?
-    json winner: self.class.game.winner
+    json winner: self.class.game.winner.attributes
   end
 
   def player_by_api_key

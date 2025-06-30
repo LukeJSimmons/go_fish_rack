@@ -1,0 +1,41 @@
+{
+  "id": "file:/round_result.json#",
+  "type": "object",
+  "required": [
+    "target",
+    "request",
+    "current_player",
+    "matching_cards",
+    "drawn_cards",
+    "scored_books"
+  ],
+  "properties": {
+    "current_player": {
+      "$ref": "file:/player.json#"
+    },
+    "target": {
+      "$ref": "file:/player.json#"
+    },
+    "request": {
+      "type": "string"
+    },
+    "matching_cards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "drawn_cards": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scored_books": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

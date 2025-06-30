@@ -1,0 +1,13 @@
+{
+  "id": "file:/game.json#",
+  "type": "object",
+  "required": [
+    "winner"
+  ],
+  "properties": {
+    "winner": {
+      "type": "object",
+      "$ref": "file:/player.json#"
+    }
+  }
+}

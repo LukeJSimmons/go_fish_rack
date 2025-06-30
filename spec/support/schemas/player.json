@@ -1,0 +1,20 @@
+{
+  "id": "file:/player.json#",
+  "type": "object",
+  "required": [
+    "name",
+    "hand_count",
+    "books_count"
+  ],
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "hand_count": {
+      "type": "integer"
+    },
+    "books_count": {
+      "type": "integer"
+    }
+  }
+}
