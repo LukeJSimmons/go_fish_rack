@@ -64,14 +64,14 @@ class Server < Sinatra::Base
     Rack::Auth::Basic::Request.new(request.env)
   end
 
-  def session_key
-    return session[:api_key] unless request.content_type == 'application/json'
-    return :invalid_key unless request.env["HTTP_AUTHORIZATION"]
-    auth.username
+  def api_key
+    return request.env['HTTP_HTTP_AUTHORIZATION'] if request.content_type == 'application/json'
+    session[:api_key]
   end
 
   def is_valid_player?(player)
-    player&.api_key == session_key && player
+    player = player_by_api_key unless player
+    player&.api_key == api_key && player
   end
 
   def get_player_by_name(name)
@@ -80,7 +80,11 @@ class Server < Sinatra::Base
 
   def game_state
     return json players: self.class.game.players, players_needed: self.class.game.players_needed unless self.class.game.started?
-    return json players: self.class.game.players, hand: session[:current_player].hand, round_result: self.class.game.round_results.last unless self.class.game.game_over?
+    return json players: self.class.game.players, hand: player_by_api_key.hand, round_result: self.class.game.round_results.last unless self.class.game.game_over?
     json winner: self.class.game.winner
+  end
+
+  def player_by_api_key
+    self.class.api_keys[api_key]
   end
 end

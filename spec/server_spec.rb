@@ -322,7 +322,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'HTTP_API_KEY' => api_key,
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
@@ -347,7 +347,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'HTTP_API_KEY' => api_key,
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
@@ -374,7 +374,7 @@ RSpec.describe Server do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
           get '/game', nil, {
-            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'HTTP_API_KEY' => api_key,
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
