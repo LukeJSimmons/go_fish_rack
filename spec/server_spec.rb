@@ -282,6 +282,34 @@ RSpec.describe Server do
         expect(session1).to have_button("Request", disabled: false)
       end
     end
+
+    describe 'win state' do
+      context 'when player 1 is the winner' do
+        before do
+          Server.game.deck.clear
+          Server.game.players.each { |player| player.hand.clear }
+          Server.game.players.first.books = [[Card.new('A','H')]]
+          session1.driver.refresh
+        end
+
+        it 'displays player 1' do
+          expect(session1).to have_content("Player 1 Wins")
+        end
+      end
+
+      context 'when player 2 is the winner' do
+        before do
+          Server.game.deck.clear
+          Server.game.players.each { |player| player.hand.clear }
+          Server.game.players[1].books = [[Card.new('A','H')]]
+          session1.driver.refresh
+        end
+
+        it 'displays player 2' do
+          expect(session1).to have_content("Player 2 Wins")
+        end
+      end
+    end
   end
 
   describe 'API key authorization' do

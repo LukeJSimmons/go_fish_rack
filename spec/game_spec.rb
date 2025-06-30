@@ -272,4 +272,22 @@ RSpec.describe Game do
       end
     end
   end
+
+  describe '#game_over' do
+    context 'when game is not over' do
+      it 'returns false' do
+        expect(game.game_over?).to eq false
+      end
+    end
+
+    context 'when game is over' do
+      before do
+        game.deck.clear
+      end
+
+      it 'returns true' do
+        expect(game.game_over?).to eq true
+      end
+    end
+  end
 end

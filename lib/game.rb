@@ -58,6 +58,10 @@ class Game
     deck.count < BASE_DECK_SIZE
   end
 
+  def game_over?
+    deck.empty? && players.all? { |player| player.hand.empty? }
+  end
+
   def advance_round
     self.round += 1
   end
