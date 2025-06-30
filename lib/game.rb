@@ -71,6 +71,14 @@ class Game
     players[round%players.count] unless players.count == 0
   end
 
+  def is_valid_target?(target)
+    target = players.find { |player| player.name == target }
+    players.include?(target) && target != current_player
+  end
+
+  def is_valid_request?(request)
+    current_player.hand.map(&:rank).include?(request)
+  end
 
   private
 

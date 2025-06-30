@@ -395,12 +395,45 @@ RSpec.describe Server do
         it 'returns game status via API' do
           api_key = JSON.parse(last_response.body)['api_key']
           expect(api_key).not_to be_nil
-          post '/game', { 'target' => 'Caleb', 'request' => 'A' }.to_json, {
+          get '/game', nil, {
+            'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+            'Accept' => 'application/json',
+            'CONTENT_TYPE' => 'application/json'
+          }
+          post '/game', { 'target' => 'Joe', 'request' => Server.game.players.first.hand.first.rank }.to_json, {
             'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
             'Accept' => 'application/json',
             'CONTENT_TYPE' => 'application/json'
           }
           expect(last_response).to match_json_schema('round_result')
+        end
+
+        context 'input validation' do
+          context 'when target is invalid' do
+            it 'returns error' do
+              api_key = JSON.parse(last_response.body)['api_key']
+              expect(api_key).not_to be_nil
+              post '/game', { 'target' => 'Caleb', 'request' => 'A' }.to_json, {
+                'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+                'Accept' => 'application/json',
+                'CONTENT_TYPE' => 'application/json'
+              }
+              expect(last_response.status).to eq 418
+            end
+          end
+
+          context 'when request is invalid' do
+            it 'returns error' do
+              api_key = JSON.parse(last_response.body)['api_key']
+              expect(api_key).not_to be_nil
+              post '/game', { 'target' => 'Joe', 'request' => '11' }.to_json, {
+                'HTTP_AUTHORIZATION' => "Basic #{Base64.encode64(api_key + ':X')}",
+                'Accept' => 'application/json',
+                'CONTENT_TYPE' => 'application/json'
+              }
+              expect(last_response.status).to eq 418
+            end
+          end
         end
       end
     end

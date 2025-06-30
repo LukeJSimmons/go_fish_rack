@@ -51,6 +51,7 @@ class Server < Sinatra::Base
 
   post '/game' do
     error 401 unless is_valid_player?(session[:current_player])
+    error 418 unless self.class.game.is_valid_target?(params[:target]) && self.class.game.is_valid_request?(params[:request])
     round_result = self.class.game.play_round(get_player_by_name(params[:target]), params[:request])
 
     respond_to do |format|
