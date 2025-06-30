@@ -16,6 +16,7 @@ class Game
   end
 
   def add_player(player)
+    return if players_needed == 0
     players << player
     player
   end

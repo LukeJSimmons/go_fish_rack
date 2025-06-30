@@ -6,4 +6,7 @@
       form.form-group action="/join" method="post"
         label.form-label for="name" Input your name
         input#name.form-control type="text" name="name"
+        - if Server.game.players.empty?
+          label.form-label for="number_of_players" Input how many players you want in your game
+          input#number_of_players.form-control type="number" name="number_of_players"
         button.btn.btn--primary type="submit" Join

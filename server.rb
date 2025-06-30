@@ -26,7 +26,8 @@ class Server < Sinatra::Base
 
   post '/join' do
     player = Player.new(params['name'], Base64.urlsafe_encode64(params['name']))
-    session[:current_player] = self.class.game.add_player(player) unless self.class.game.players_needed == 0
+    self.class.game.players_needed_to_start = params["number_of_players"].to_i if self.class.game.players.empty?
+    session[:current_player] = self.class.game.add_player(player)
     session[:api_key] = player.api_key
     self.class.api_keys[player.api_key] = player
 

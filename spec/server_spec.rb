@@ -37,6 +37,7 @@ RSpec.describe Server do
   it 'is possible to join a lobby' do
     visit '/'
     fill_in :name, with: 'John'
+    fill_in :number_of_players, with: 2
     click_on 'Join'
     expect(page).to have_content('Lobby')
     expect(page).to have_content('John')
@@ -45,6 +46,7 @@ RSpec.describe Server do
   it 'displays inputted name' do
     visit '/'
     fill_in :name, with: 'Billy Bob'
+    fill_in :number_of_players, with: 2
     click_on 'Join'
     expect(page).to have_content('Billy Bob')
   end
@@ -54,13 +56,14 @@ RSpec.describe Server do
     let(:session2) { Capybara::Session.new(:headless_chrome, Server.new) }
 
     before do
+      Server.game.ignore_shuffle = true
       [ session1, session2 ].each_with_index do |session, index|
         player_name = "Player #{index + 1}"
         session.visit '/'
         session.fill_in :name, with: player_name
+        session.fill_in :number_of_players, with: 2 if index == 0
         session.click_on 'Join'
       end
-      Server.game.ignore_shuffle = true
       session1.driver.refresh
       session1.driver.refresh
     end
@@ -308,7 +311,7 @@ RSpec.describe Server do
   describe 'API key authorization' do
     context 'when client has API key' do
       before do
-        post '/join', { 'name' => 'Caleb' }.to_json, {
+        post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
           'Accept' => 'application/json',
           'CONTENT_TYPE' => 'application/json'
         }
@@ -357,7 +360,7 @@ RSpec.describe Server do
 
     context 'when client has opponent API key' do
       before do
-        post '/join', { 'name' => 'Caleb' }.to_json, {
+        post '/join', { 'name' => 'Caleb', 'number_of_players' => '2' }.to_json, {
           'Accept' => 'application/json',
           'CONTENT_TYPE' => 'application/json'
         }
@@ -394,20 +397,21 @@ RSpec.describe Server do
     end
   end
 
-  fcontext 'when there are three players' do
+  context 'when there are three players' do
     let(:session1) { Capybara::Session.new(:headless_chrome, Server.new) }
     let(:session2) { Capybara::Session.new(:headless_chrome, Server.new) }
     let(:session3) { Capybara::Session.new(:headless_chrome, Server.new) }
 
     context 'when players_needed is two' do
       before do
-        Server.game.players_needed_to_start = 2
         [ session1, session2, session3 ].each_with_index do |session, index|
           player_name = "Player #{index + 1}"
           session.visit '/'
           session.fill_in :name, with: player_name
+          session.fill_in :number_of_players, with: 2 if index == 0
           session.click_on 'Join'
         end
+        session1.driver.refresh
         session1.driver.refresh
       end
 
@@ -420,11 +424,11 @@ RSpec.describe Server do
 
     context 'when players_needed is three' do
       before do
-        Server.game.players_needed_to_start = 3
         [ session1, session2, session3 ].each_with_index do |session, index|
           player_name = "Player #{index + 1}"
           session.visit '/'
           session.fill_in :name, with: player_name
+          session.fill_in :number_of_players, with: 3 if index == 0
           session.click_on 'Join'
         end
         session1.driver.refresh
