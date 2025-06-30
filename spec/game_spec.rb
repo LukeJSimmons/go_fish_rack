@@ -270,6 +270,25 @@ RSpec.describe Game do
           expect(game.winner).to eq player2
         end
       end
+
+      context 'when there are three players' do
+        let(:player3) { Player.new('Player 3') }
+        before do
+          game.add_player(player3)
+        end
+
+        context 'when player 2 has highest rank book' do
+          before do
+            player1.books = [[Card.new('Q','H')],[Card.new('K','H')]]
+            player2.books = [[Card.new('A','H')],[Card.new('J','H')]]
+            player3.books = [[Card.new('10','H')]]
+          end
+
+          it 'returns player with highest rank book' do
+            expect(game.winner).to eq player2
+          end
+        end
+      end
     end
   end
 

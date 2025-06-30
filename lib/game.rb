@@ -99,7 +99,7 @@ class Game
   end
 
   def tie
-    players.all? { |player| player.books.count == players.first.books.count }
+    players.any? { |player| player.books.count == players.first.books.count && player != players.first }
   end
 
   def player_with_highest_rank_book

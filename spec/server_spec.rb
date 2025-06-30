@@ -49,7 +49,7 @@ RSpec.describe Server do
     expect(page).to have_content('Billy Bob')
   end
 
- context 'when there are multiple players' do
+ context 'when there are two players' do
     let(:session1) { Capybara::Session.new(:headless_chrome, Server.new) }
     let(:session2) { Capybara::Session.new(:headless_chrome, Server.new) }
 
@@ -390,6 +390,52 @@ RSpec.describe Server do
           }
           expect(last_response.status).to eq 401
         end
+      end
+    end
+  end
+
+  fcontext 'when there are three players' do
+    let(:session1) { Capybara::Session.new(:headless_chrome, Server.new) }
+    let(:session2) { Capybara::Session.new(:headless_chrome, Server.new) }
+    let(:session3) { Capybara::Session.new(:headless_chrome, Server.new) }
+
+    context 'when players_needed is two' do
+      before do
+        Server.game.players_needed_to_start = 2
+        [ session1, session2, session3 ].each_with_index do |session, index|
+          player_name = "Player #{index + 1}"
+          session.visit '/'
+          session.fill_in :name, with: player_name
+          session.click_on 'Join'
+        end
+        session1.driver.refresh
+      end
+
+      it 'does not allow multiple players to join game' do
+        expect(session1).to have_content('Game')
+        expect(session2).to have_content('Game')
+        expect(session3).to_not have_content('Game')
+      end
+    end
+
+    context 'when players_needed is three' do
+      before do
+        Server.game.players_needed_to_start = 3
+        [ session1, session2, session3 ].each_with_index do |session, index|
+          player_name = "Player #{index + 1}"
+          session.visit '/'
+          session.fill_in :name, with: player_name
+          session.click_on 'Join'
+        end
+        session1.driver.refresh
+        session1.driver.refresh
+        session2.driver.refresh
+      end
+
+      it 'allows multiple players to join game' do
+        expect(session1).to have_content('Game')
+        expect(session2).to have_content('Game')
+        expect(session3).to have_content('Game')
       end
     end
   end

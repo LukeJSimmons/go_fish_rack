@@ -1,7 +1,7 @@
 - if game.game_over?
   .game-over
     span.game-over__winner = "#{game.winner.name} Wins"
-- elsif game.started?
+- elsif game.started? && game.players_needed == 0
   .game-layout
     .panel.panel--player-decks
       .panel__header
